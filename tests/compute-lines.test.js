@@ -1,5 +1,5 @@
 import { assert } from '@esm-bundle/chai';
-import { computeLineInformation, DiffMethod } from 'diff-view-kit/exports/utils/compute-line-info.js';
+import { computeLineInformation, DiffMethod } from 'diff-view-element/exports/utils/compute-line-info.js';
 
 suite('Testing compute lines utils', () => {
   test('Should it avoid trailing spaces', () => {

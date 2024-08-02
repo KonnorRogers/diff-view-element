@@ -54,7 +54,7 @@ export const DiffMethod = /** @type {const} */ ({
  * @property {string | DiffInformation[]} [value]
  * @property {number} [lineNumber]
  * @property {typeof DiffType[keyof typeof DiffType]} [type]
- * @property {import("./light-diff-viewer.js").LineDiffData[]} [data]
+ * @property {import("../components/diff-view-element/diff-view-element.js").LineDiffData[]} [data]
  */
 
 /**

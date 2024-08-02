@@ -1,10 +1,10 @@
 import { html, fixture, assert } from "@open-wc/testing";
 import { readFile } from "@web/test-runner-commands"
-import "../exports/components/light-diff-viewer/light-diff-viewer-register.js";
+import "diff-view-element";
 
 suite("<diff-view-element>", () => {
   test("Should render a component", async () => {
-    const el = await fixture(html` <light-diff-viewer></light-diff-viewer> `);
+    const el = await fixture(html` <diff-view-element></diff-view-element> `);
 
     assert(
       el.matches(":defined"),
@@ -12,12 +12,12 @@ suite("<diff-view-element>", () => {
     );
   });
   test("Should correctly identify diffs for a simple comparison", async () => {
-    const el = await fixture(html` <light-diff-viewer
+    const el = await fixture(html` <diff-view-element
       language="javascript"
       oldValue="const x = 'Hello World'"
       newValue="const y = 'Hello Moto'
 console.log(y)"
-      ></light-diff-viewer>`)
+      ></diff-view-element>`)
     const addedLines = el.shadowRoot.querySelector("table").querySelectorAll("[part~='line-inserted']")
     assert.equal(addedLines.length, 2)
     const removedLines = el.shadowRoot.querySelector("table").querySelectorAll("[part~='line-deleted']")
@@ -41,7 +41,7 @@ console.log(y)"
   })
 
   test("Should correctly identify diffs for an advanced comparison", async () => {
-    const el = await fixture(html` <light-diff-viewer></light-diff-viewer> `);
+    const el = await fixture(html` <diff-view-element></diff-view-element> `);
 
     const oldValue = await readFile({ path: "fixtures/webpack-diff-old.js" }).catch((e) => console.error(e))
     const newValue = await readFile({ path: "fixtures/webpack-diff-new.js" }).catch((e) => console.error(e))

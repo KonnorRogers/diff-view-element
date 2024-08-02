@@ -32,7 +32,7 @@ const componentNames = glob
 const components = {};
 
 componentNames.forEach((name) => {
-  components[`light-pen/exports/components/${name}/${name}`] =
+  components[`diff-view-element/exports/components/${name}/${name}`] =
     `../exports/components/${name}/${name}.js`;
 });
 

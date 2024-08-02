@@ -14,9 +14,6 @@ importers:
       diff:
         specifier: ^5.2.0
         version: 5.2.0
-      form-associated-helpers:
-        specifier: ^0.0.10
-        version: 0.0.10
       lit:
         specifier: ^3.1.4
         version: 3.1.4
@@ -57,15 +54,15 @@ importers:
       cem-plugin-expanded-types:
         specifier: ^1.3.1
         version: 1.3.1
+      diff-view-element:
+        specifier: link:.
+        version: 'link:'
       gh-pages:
         specifier: ^6.1.1
         version: 6.1.1
       glob:
         specifier: ^10.4.1
         version: 10.4.1
-      light-pen:
-        specifier: link:.
-        version: 'link:'
       playwright:
         specifier: ^1.44.1
         version: 1.44.1
@@ -1163,9 +1160,6 @@ packages:
   foreground-child@3.1.1:
     resolution: {integrity: sha512-TMKDUnIte6bfb5nWv7V/caI169OHgvwjb7V4WkeUvbQQdjr5rWKqHFiKWb/fcOwB+CzBT+qbWjvj+DVwRskpIg==}
     engines: {node: '>=14'}
-
-  form-associated-helpers@0.0.10:
-    resolution: {integrity: sha512-ClR8Y8muq6EPsmUZsPf+iWUWvRpRzSRGm/ESb5pbhf1PsRSph5cWjpvBlHrNeaBwTGPC1R0kFjAb5kR96ZQe+Q==}
 
   fresh@0.5.2:
     resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}
@@ -3746,8 +3740,6 @@ snapshots:
     dependencies:
       cross-spawn: 7.0.3
       signal-exit: 4.1.0
-
-  form-associated-helpers@0.0.10: {}
 
   fresh@0.5.2: {}
 

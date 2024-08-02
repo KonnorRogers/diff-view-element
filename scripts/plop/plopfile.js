@@ -8,7 +8,7 @@ const getDirectories = (source) =>
     .map((dirent) => dirent.name);
 
 export default function (plop) {
-  const componentPrefix = "light-";
+  const componentPrefix = "";
 
   function tagWithoutPrefix(tag) {
     return tag.replace(new RegExp(`^${componentPrefix}`), "");

@@ -1,7 +1,7 @@
 {
-  "name": "diff-view-kit",
+  "name": "diff-view-element",
   "version": "1.0.0",
-  "description": "A kit for building diff views in the browser",
+  "description": "A web component for displaying diffs in the browser",
   "main": "./exports/index.js",
   "module": "./exports/index.js",
   "types": "./exports/index.d.ts",
@@ -46,16 +46,16 @@
   },
   "keywords": [
     "web-components",
-    "codepen",
     "syntax highlighting",
-    "editor"
+    "diffs",
+    "diff"
   ],
   "license": "MIT",
-  "repository": "git@github.com:KonnorRogers/diff-viewer.git",
+  "repository": "git@github.com:KonnorRogers/diff-view-element.git",
   "bugs": {
-    "url": "https://github.com/KonnorRogers/diff-viewer/issues"
+    "url": "https://github.com/KonnorRogers/diff-view-element/issues"
   },
-  "homepage": "https://github.com/KonnorRogers/diff-viewer",
+  "homepage": "https://github.com/KonnorRogers/diff-view-element",
   "author": "KonnorRogers <konnor5456@gmail.com>",
   "publishConfig": {
     "access": "public"
@@ -73,7 +73,7 @@
     "cem-plugin-expanded-types": "^1.3.1",
     "gh-pages": "^6.1.1",
     "glob": "^10.4.1",
-    "diff-view-kit": "link:.",
+    "diff-view-element": "link:.",
     "playwright": "^1.44.1",
     "plop": "^4.0.1",
     "prettier": "^3.3.3",

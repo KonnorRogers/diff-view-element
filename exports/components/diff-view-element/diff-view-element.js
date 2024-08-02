@@ -1,22 +1,23 @@
 import { html } from "lit";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import { Token } from "prism-esm";
+// import { getDiffableHTML } from '@open-wc/semantic-dom-diff/get-diffable-html.js';
 
 import { BaseElement } from "../../../internal/base-element.js";
 import { baseStyles } from "../../styles/base-styles.js";
 import { componentStyles } from "./diff-view-element.styles.js";
+import { theme } from "../../styles/default-theme.styles.js";
+
+import { computeLineInformation } from "../../utils/compute-line-info.js";
 
 import {
   createPrismInstance,
   PrismEnv,
 } from "../../../internal/prism-highlight.js";
 import { replaceLast } from "../../../internal/replace-functions.js";
-import { computeLineInformation } from "./compute-line-info.js";
-import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { LineNumberPlugin } from "../../../internal/line-number-plugin.js";
 import { LineHighlightWrapPlugin } from "../../../internal/line-highlight-plugin.js";
-import { Token } from "prism-esm";
-import { theme } from "../../styles/default-theme.styles.js";
 
-// import { getDiffableHTML } from '@open-wc/semantic-dom-diff/get-diffable-html.js';
 
 class CustomToken extends Token {
   /**
@@ -35,39 +36,30 @@ class CustomToken extends Token {
 /**
  * @typedef {object} LineDiffData
  * @property {number} length - length of the diff.
- * @property {import("./compute-line-info.js").DiffTypeValues} type - The type of diff
+ * @property {import("../../utils/compute-line-info.js").DiffTypeValues} type - The type of diff
  * @property {number} offset - The offset along the X axis where the diff starts.
  * @property {number} offset - The offset along the X axis where the diff starts.
  */
 
 /**
  * @customElement
- * @tagname light-diff-viewer
+ * @tagname diff-view-element
  * @summary Short summary of the component's intended use.
- * @documentation https://konnorrogers.github.io/diff-view-kit/components/light-diff-viewer
+ * @documentation https://konnorrogers.github.io/diff-view-kit/components/diff-view-element
  * @status experimental
- * @since 4.0
- *
- * @event light-event-name - Emitted as an example.
- *
- * @slot - The default slot.
- *
- * @csspart base - The component's base wrapper.
- *
- * @cssproperty --example - An example CSS custom property.
+ * @since 1.0
  */
-export default class LightDiffViewer extends BaseElement {
+export default class DiffViewElement extends BaseElement {
   /**
    * @override
    */
-  static baseName = "light-diff-viewer";
+  static baseName = "diff-view-element";
 
   /**
    * @override
    */
   static styles = [
     baseStyles,
-    // codeStyles,
     theme,
     componentStyles,
   ];
@@ -80,12 +72,8 @@ export default class LightDiffViewer extends BaseElement {
     newValue: {},
     oldValue: {},
 
-    // <light-code> properties
     disableHighlight: { type: Boolean, attribute: "disable-highlight" },
     preserveWhitespace: { type: Boolean, attribute: "preserve-whitespace" },
-    emptyLines: { attribute: "highlight-lines" },
-    insertedLines: { attribute: "inserted-lines" },
-    deletedLines: { attribute: "deleted-lines" },
     disableLineNumbers: {
       type: Boolean,
       reflect: true,
@@ -94,7 +82,6 @@ export default class LightDiffViewer extends BaseElement {
     lineNumberStart: { type: Number, attribute: "line-number-start" },
     wrap: { reflect: true, attribute: "wrap" },
     language: {},
-    code: {},
     highlighter: { attribute: false, state: true },
   });
 
@@ -132,21 +119,6 @@ export default class LightDiffViewer extends BaseElement {
      * @type {boolean}
      */
     this.disableHighlight = false;
-
-    /**
-     * @type {string} - A string of possible lines to highlight. Example: "{1-9, 16, 18}"
-     */
-    this.emptyLines = "";
-
-    /**
-     * @type {string} - A string of lines that are inserted for diffs. Example: "{1-9, 16, 18}"
-     */
-    this.insertedLines = "";
-
-    /**
-     * @type {string} - A string of lines that are deleted for diffs. Example: "{1-9, 16, 18}"
-     */
-    this.deletedLines = "";
 
     /**
      * @type {boolean} whether or not to disable line numbers
@@ -237,34 +209,34 @@ export default class LightDiffViewer extends BaseElement {
   }
 
   /**
-   * @param {import("./compute-line-info.js").DiffInformation} diffInfo
+   * @param {import("../../utils/compute-line-info.js").DiffInformation} diffInfo
    */
   renderLine(diffInfo) {
     return html`${unsafeHTML(/** @type {string} */ (diffInfo.value))}`;
   }
 
   /**
-   * @param {import("./compute-line-info.js").DiffInformation} obj
+   * @param {import("../../utils/compute-line-info.js").DiffInformation} obj
    */
   renderWord(obj) {
     return obj.value;
   }
 
   /**
-   * @param {import("./compute-line-info.js").DiffInformation} diffInfo - diff info for right or light
-   * @param {import("./compute-line-info.js").DiffInformation} diffInfoLine - diffInfo.value for right / left
+   * @param {import("../../utils/compute-line-info.js").DiffInformation} diffInfo - diff info for right or light
+   * @param {import("../../utils/compute-line-info.js").DiffInformation} diffInfoLine - diffInfo.value for right / left
    * @param {number} index
    * @returns {LineDiffData}
    */
   toWordData(diffInfo, diffInfoLine, index) {
-    const offsetValue = /** @type {import("./compute-line-info.js").DiffInformation[]} */ (
+    const offsetValue = /** @type {import("../../utils/compute-line-info.js").DiffInformation[]} */ (
           diffInfo.value
         )
           .slice(0, index)
           .map((obj) => obj.value || "")
           .join("") || ""
 
-    const value = /** @type {import("./compute-line-info.js").DiffInformation[]} */ (
+    const value = /** @type {import("../../utils/compute-line-info.js").DiffInformation[]} */ (
           diffInfo.value
         )
           .map((obj) => obj.value || "")
@@ -340,17 +312,17 @@ export default class LightDiffViewer extends BaseElement {
   }
 
   /**
-   * @param {import("./compute-line-info.js").LineInformation[]} lineInfo
+   * @param {import("../../utils/compute-line-info.js").LineInformation[]} lineInfo
    */
   syntaxHighlight(lineInfo) {
     const leftObj = {
-      value: /** @type {import("./compute-line-info.js").DiffInformation["value"]}  */ ([]),
+      value: /** @type {import("../../utils/compute-line-info.js").DiffInformation["value"]}  */ ([]),
       insertedLines: new Set(),
       deletedLines: new Set(),
     };
 
     const rightObj = {
-      value: /** @type {import("./compute-line-info.js").DiffInformation["value"]}  */ ([]),
+      value: /** @type {import("../../utils/compute-line-info.js").DiffInformation["value"]}  */ ([]),
       insertedLines: new Set(),
       deletedLines: new Set(),
     };
@@ -501,7 +473,7 @@ export default class LightDiffViewer extends BaseElement {
   }
 
   /**
-   * @param {import("./compute-line-info.js").LineInformation[]} lineInformation
+   * @param {import("../../utils/compute-line-info.js").LineInformation[]} lineInformation
    */
   transformLineInformation(lineInformation) {
     const finalRight = [];
@@ -576,7 +548,7 @@ export default class LightDiffViewer extends BaseElement {
     }
 
     /**
-     * @type {Array<import("./compute-line-info.js").DiffTypeValues>}
+     * @type {Array<import("../../utils/compute-line-info.js").DiffTypeValues>}
      */
     const important_types = ["removed", "added"];
 
