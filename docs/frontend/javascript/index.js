@@ -1,4 +1,4 @@
-import "diff-view-element"
+import "diff-view-element";
 import "../styles/index.css";
 import { Application } from "@hotwired/stimulus";
 
@@ -15,7 +15,6 @@ import "./src/layout.js";
 LazyLoader();
 //
 setBasePath(process.env.BASE_PATH + "/shoelace-assets");
-
 
 // Import all JavaScript & CSS files from src/_components
 import components from "bridgetownComponents/**/*.{js,jsx,js.rb,css}";

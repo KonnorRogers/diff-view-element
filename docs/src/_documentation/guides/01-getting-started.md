@@ -31,10 +31,7 @@ import "diff-view-element"; // Will register `<diff-viewer>` for you
 ```
 
 ```html
-<diff-view-element
-  oldValue="abcd"
-  newValue="abce"
-></diff-view-element>
+<diff-view-element oldValue="abcd" newValue="abce"></diff-view-element>
 ```
 
 <!-- <%%= component_list %> -->

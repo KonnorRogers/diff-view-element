@@ -7,8 +7,9 @@ title: <diff-view-element>
 ## Examples
 
 <light-preview
-  preview-mode="shadow-dom"
-  script-scope="shadow-dom"
+preview-mode="shadow-dom"
+script-scope="shadow-dom"
+
 >
 
   <script slot="code" type="text/plain">
@@ -25,9 +26,11 @@ console.log(y)"
 ### First Example
 
 <light-preview
-  preview-mode="shadow-dom"
-  script-scope="shadow-dom"
+preview-mode="shadow-dom"
+script-scope="shadow-dom"
+
 >
+
   <script slot="code" type="text/plain">
     <diff-view-element
       language="javascript"
@@ -49,9 +52,11 @@ console.log(y)"
 ### Diffing between 2 elements
 
 <light-preview
-  preview-mode="shadow-dom"
-  script-scope="shadow-dom"
+preview-mode="shadow-dom"
+script-scope="shadow-dom"
+
 >
+
   <script slot="code" type="text/plain">
     <div id="element-1">Element 1</div>
     <div id="element-2">Element 2</div>
@@ -62,7 +67,6 @@ console.log(y)"
     </diff-view-element>
   </script>
 </light-preview>
-
 
 ## Future enhancements
 
