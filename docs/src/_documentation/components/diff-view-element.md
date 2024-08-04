@@ -7,9 +7,8 @@ title: <diff-view-element>
 ## Examples
 
 <light-preview
-preview-mode="shadow-dom"
-script-scope="shadow-dom"
-
+  preview-mode="shadow-dom"
+  script-scope="shadow-dom"
 >
 
   <script slot="code" type="text/plain">
@@ -23,14 +22,12 @@ console.log(y)"
   </script>
 </light-preview>
 
-### First Example
+### A large example
 
 <light-preview
-preview-mode="shadow-dom"
-script-scope="shadow-dom"
-
+  preview-mode="shadow-dom"
+  script-scope="shadow-dom"
 >
-
   <script slot="code" type="text/plain">
     <diff-view-element
       language="javascript"
@@ -49,29 +46,104 @@ script-scope="shadow-dom"
   </script>
 </light-preview>
 
-### Diffing between 2 elements
+### Disabling line numbers
+
+Line numbers can be disabled by adding the `disable-line-numbers` attribute.
 
 <light-preview
-preview-mode="shadow-dom"
-script-scope="shadow-dom"
-
+  preview-mode="shadow-dom"
+  script-scope="shadow-dom"
 >
 
   <script slot="code" type="text/plain">
-    <div id="element-1">Element 1</div>
-    <div id="element-2">Element 2</div>
-    <br>
     <diff-view-element
       language="javascript"
+      disable-line-numbers=""
+      oldValue="const x = 'Hello World'"
+      newValue="const y = 'Hello Moto'
+console.log(y)"
+    ></diff-view-element>
+  </script>
+</light-preview>
+
+### Changing the starting line number
+
+The starting line number can be changed by using the `line-number-start` attribute.
+
+<light-preview
+  preview-mode="shadow-dom"
+  script-scope="shadow-dom"
+>
+
+  <script slot="code" type="text/plain">
+    <diff-view-element
+      language="javascript"
+      line-number-start="35"
+      oldValue="const x = 'Hello World'"
+      newValue="const y = 'Hello Moto'
+console.log(y)"
+    ></diff-view-element>
+  </script>
+</light-preview>
+
+### Slotting in content
+
+Content can be slotted in using `<script type="text/plain">` tags. Do note, it will only escape `&lt;/script>` and turn it in to `</script>`. It will not escape any HTML for you.
+
+As for why a `<script type="text/plain">` is preferred, check out the docs on ["Why Script Tags"](/references/why-script-tags/)
+
+<light-preview
+  preview-mode="shadow-dom"
+  script-scope="shadow-dom"
+  unescape-behavior="all"
+>
+  <script slot="code" type="text/plain">
+    <diff-view-element
+      language="html"
     >
+      <script slot="old-value" type="text/plain">
+        <div>Hello World</div>
+      &lt;/script>
+      <script slot="new-value" type="text/plain">
+        <span>Hello World</span>
+      &lt;/script>
     </diff-view-element>
   </script>
 </light-preview>
 
-## Future enhancements
+### Preserving whitespace
+
+Whitespace can be preserved by using `preserve-whitespace` which will also preserve leading / trailing new lines.
+
+<light-preview
+  preview-mode="shadow-dom"
+  script-scope="shadow-dom"
+  unescape-behavior="all"
+>
+  <script slot="code" type="text/plain">
+    <diff-view-element
+      language="html"
+      preserve-whitespace
+    >
+      <script slot="old-value" type="text/plain">
+
+        <div>Hello World</div>
+
+      &lt;/script>
+      <script slot="new-value" type="text/plain">
+
+        <span>Hello World</span>
+
+      &lt;/script>
+    </diff-view-element>
+  </script>
+</light-preview>
+
+## Future ideas
 
 - [ ] - "Unified view"
 - [ ] - Render functions for additional things like buttons
 - [ ] - Render diff between 2 elements
+- [ ] - Code folding
 
 Got an idea? I'd love to hear it.

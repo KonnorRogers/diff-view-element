@@ -18,11 +18,32 @@ export const componentStyles = css`
     vertical-align: top;
   }
 
-  td[part~="gutter-cell"] {
+  [part~="gutter-cell"] {
+    user-select: none;
+    font-variant-numeric: tabular-nums;
+    color: rgba(0, 0, 0, 0.35);
+    background-color: var(--syntax-bg);
     vertical-align: top;
     border-inline-end: 1px solid gray;
     word-break: normal;
-    padding: 2px 8px;
+    padding: 2px 0px;
+    padding-inline-end: 8px;
+    padding-inline-start: 20px;
+    width: 1ch;
+  }
+
+  [part~="line"] {
+    text-align: start;
+  }
+
+  :host([disable-line-numbers]) [part~="gutter-cell"] {
+    display: none;
+  }
+
+  [part~="line-number"] {
+    display: block;
+    min-width: max-content;
+    text-align: end;
   }
 
   table {
@@ -35,7 +56,7 @@ export const componentStyles = css`
     padding-inline-start: 4px;
   }
 
-  [part~="marker"],
+  [part~="diff-marker"],
   [part~="gutter-cell"],
   [part~="line"] {
     min-height: 1lh;
@@ -43,33 +64,23 @@ export const componentStyles = css`
     word-break: inherit;
   }
 
-  [part~="marker"] {
+  [part~="diff-marker"] {
     padding-inline-start: 4px;
     text-align: center;
     user-select: none;
     font-variant-numeric: tabular-nums;
   }
 
-  [part~="marker"]::after {
+  [part~="diff-marker"]::after {
     content: " ";
   }
 
-  [part~="marker"][part~="marker-deleted"]::after {
+  [part~="diff-marker"][part~="diff-marker-deleted"]::after {
     content: "-";
   }
 
-  [part~="marker"][part~="marker-inserted"]::after {
+  [part~="diff-marker"][part~="diff-marker-inserted"]::after {
     content: "+";
-  }
-
-  [part~="gutter-cell"] {
-    user-select: none;
-    font-variant-numeric: tabular-nums;
-    color: rgba(0, 0, 0, 0.35);
-    background-color: var(--syntax-bg);
-    text-align: end;
-    z-index: 1;
-    left: 0px;
   }
 
   [part~="character-diff"][part~="character-diff--removed"] {

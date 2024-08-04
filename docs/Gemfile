@@ -49,3 +49,5 @@ gem "debug", "~> 1.8", :group => :development
 gem "solargraph", :group => :development
 gem "yard", "~> 0.9.34", :group => :development
 gem "ffi", "1.16.2"
+
+gem "bridgetown-routes", "~> 1.3"

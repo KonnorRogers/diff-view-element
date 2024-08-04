@@ -17,6 +17,8 @@ import {
 import { replaceLast } from "../../../internal/replace-functions.js";
 import { LineNumberPlugin } from "../../../internal/line-number-plugin.js";
 import { LineHighlightWrapPlugin } from "../../../internal/line-highlight-plugin.js";
+import { elementsToString } from "../../../internal/elements-to-strings.js";
+import { dedent } from "../../../internal/dedent.js";
 
 class CustomToken extends Token {
   /**
@@ -37,7 +39,8 @@ class CustomToken extends Token {
  * @property {number} length - length of the diff.
  * @property {import("../../utils/compute-line-info.js").DiffTypeValues} type - The type of diff
  * @property {number} offset - The offset along the X axis where the diff starts.
- * @property {number} offset - The offset along the X axis where the diff starts.
+ * @property {string} offsetValue - The characters prior to the current char diff
+ * @property {string} value - The current value from diffInfo for the line. Mainly used for debugging.
  */
 
 /**
@@ -83,8 +86,16 @@ export default class DiffViewElement extends BaseElement {
   constructor() {
     super();
 
+    /**
+     * The value to be displayed on the right in a split view
+     * @type {string}
+     */
     this.newValue = "";
 
+    /**
+     * The value to be displayed on the right in a split view
+     * @type {string}
+     */
     this.oldValue = "";
 
     /**
@@ -97,11 +108,12 @@ export default class DiffViewElement extends BaseElement {
 
     /**
      * The language to highlight for.
-     * Supported languages out of the box are "html", "javascript", "markdown", "css", "js", "ts"
+     * Supported languages out of the box are "plaintext", "html", "javascript", "markdown", "css", "js", "ts"
      * For more on how to add additional languages, check out the docs.
+     *   [Adding languages for highlighting](/guides/adding-languages-for-highlighting)
      * @type {string}
      */
-    this.language = "html";
+    this.language = "plaintext";
 
     /**
      * @type {Boolean}
@@ -153,9 +165,32 @@ export default class DiffViewElement extends BaseElement {
      *
      * @type {"all" | "last" | "none"}
      */
-    this.unescapeBehavior = "last";
+    this.unescapeBehavior = "all";
 
     this.newLineRegex = /\r\n|\r|\n/;
+  }
+
+  /**
+   * @param {Event} e
+   */
+  handleSlottedValues (e) {
+    const slot = e.target
+    if (!(slot instanceof HTMLSlotElement)) { return }
+
+    let elements = slot.assignedElements({ flatten: true });
+    let value = this.unescapeTags(elementsToString(...elements));
+
+    if (!this.preserveWhitespace) {
+      value = dedent(value.trim());
+    }
+
+    if (slot.name === "old-value") {
+      this.oldValue = value
+    }
+
+    if (slot.name === "new-value") {
+      this.newValue = value
+    }
   }
 
   /**
@@ -173,10 +208,13 @@ export default class DiffViewElement extends BaseElement {
         ><code
             part="code code-${this.language}"
             class="language-${this.language}"
-	    style="white-space: inherit;"><table><tbody>${this.renderDiff(
-          computedLines,
-        )}</tbody></table></code></pre>
+	    style="white-space: inherit;"><table><tbody>${
+	      this.renderDiff(computedLines)
+	    }</tbody></table></code></pre>
       </div>
+
+      <slot name="old-value" hidden @slotchange=${this.handleSlottedValues}></slot>
+      <slot name="new-value" hidden @slotchange=${this.handleSlottedValues}></slot>
     `;
   }
 
@@ -248,56 +286,44 @@ export default class DiffViewElement extends BaseElement {
     };
   }
 
+  /**
+   * A plugin for Prism to add line numbers.
+   */
   lineNumberPlugin() {
     let lineCount = 0;
 
     return LineNumberPlugin({
       lineNumberStart: this.lineNumberStart,
-      disableLineNumbers: this.disableLineNumbers,
       callback: (ary, index, tokens) => {
         // This token won't get used, but makes it easy to render things based on array index.
         const row = new Token("row", []);
         tokens.push(row);
 
-        if (ary.length <= 0) {
-          if (!this.disableLineNumbers) {
-            // no line numbers for empty values.
-            /** @type {import("prism-esm/prism-core.js").TokenStream} */ (
-              row.content
-            ).push(new CustomToken("light-gutter-cell", ""));
-          }
 
+        if (ary.length <= 0) {
           /** @type {import("prism-esm/prism-core.js").TokenStream} */ (
             row.content
           ).push(
-            new CustomToken("light-marker", ""),
-            new CustomToken("light-line", " "),
+            new CustomToken("gutter-cell", ""),
+            new CustomToken("diff-marker", ""),
+            new CustomToken("diff-line", " "),
           );
           return;
         }
 
         const tokensIndex = lineCount++;
 
-        if (!this.disableLineNumbers) {
-          const token = new CustomToken(
-            "light-gutter-cell",
-            (tokensIndex + this.lineNumberStart).toString(),
-          );
-          // Add line numbers so we can easily add diffs.
-          token.lineNumber = tokensIndex + this.lineNumberStart;
-          if (Array.isArray(row.content)) {
-            row.content.push(token);
-          }
-        }
-
         const lineTokens = [
-          new CustomToken("light-marker", ""),
-          new CustomToken("light-line", ary),
+          new CustomToken("gutter-cell",
+            [new CustomToken("line-number", (tokensIndex + this.lineNumberStart).toString())],
+          ),
+          new CustomToken("diff-marker", ""),
+          new CustomToken("diff-line", ary),
         ];
 
         // Add line numbers so we can easily add diffs.
         lineTokens.forEach((token) => {
-          token.lineNumber = tokensIndex + this.lineNumberStart;
+          token.lineNumber = tokensIndex + 1;
 
           if (Array.isArray(row.content)) {
             row.content.push(token);
@@ -305,6 +331,25 @@ export default class DiffViewElement extends BaseElement {
         });
       },
     });
+  }
+  /**
+    * a "wrap" plugin for Prism to add parts.
+    * @param {any} env
+    */
+  diffPartPlugin (env) {
+    const cells = ["diff-line", "diff-marker", "gutter-cell"];
+
+    if (cells.some((str) => env.type.match(str))) {
+      env.tag = "td";
+    }
+
+    // Add wrap for `light-character-diff--${"removed" | "added"}`
+
+    if (env.type.startsWith("character-diff")) {
+      const [base, diffType] = env.type.split(/--/);
+      // part="character-diff character-diff--{removed|added}"
+      env.attributes["part"] = `${base} ${base}--${diffType}`;
+    }
   }
 
   /**
@@ -348,21 +393,7 @@ export default class DiffViewElement extends BaseElement {
 
     this.highlighter.hooks.add(
       "wrap",
-      /** @param {any} env */ function (env) {
-        const cells = ["light-line", "light-marker", "light-gutter-cell"];
-
-        if (cells.some((str) => env.type.match(str))) {
-          env.tag = "td";
-        }
-
-        // Add wrap for `light-character-diff--${"removed" | "added"}`
-
-        if (env.type.startsWith("light-character-diff")) {
-          const [base, diffType] = env.type.replace(/^light-/, "").split(/--/);
-          // part="character-diff character-diff--{removed|added}"
-          env.attributes["part"] = `${base} ${base}--${diffType}`;
-        }
-      },
+      this.diffPartPlugin,
     );
     this.highlighter.hooks.add(
       "wrap",
@@ -515,12 +546,12 @@ export default class DiffViewElement extends BaseElement {
   }
 
   /**
-   * Only used to unescape things like `&lt;/script>` from slotted content.
+   * Only used to unescape `&lt;/script>` into `</script>` from slotted content.
    * @internal
    * @param {string} text
    */
-  transformTags(text) {
-    const unescapeRegex = /&lt;\/([\w\d\.-_]+)>/g;
+  unescapeTags(text) {
+    const unescapeRegex = /&lt;\/script>/g;
     if (this.unescapeBehavior === "last") {
       return replaceLast(text, unescapeRegex);
     }
@@ -533,6 +564,7 @@ export default class DiffViewElement extends BaseElement {
   }
 
   /**
+   * Modify tokens from Prism.
    * @param {Token} token
    * @param {LineDiffData[]} data_array
    */
@@ -557,6 +589,7 @@ export default class DiffViewElement extends BaseElement {
   }
 
   /**
+   * Modifies a "TokenStreamItem" from Prism. T
    * @param {import("prism-esm/prism-core.js").TokenStreamItem} token
    * @param {LineDiffData} data
    * @param {{ offset: number, count: number, value: string, offsetValue: string }} [currentData={offset: 0, count: 0, value: "", offsetValue: ""}] - The current number of characters modified. Once this reaches data.length, terminates.
@@ -570,7 +603,7 @@ export default class DiffViewElement extends BaseElement {
       return;
     }
 
-    const skippedTokens = ["light-gutter-cell", "light-marker"];
+    const skippedTokens = ["gutter-cell", "diff-marker"];
 
     if (skippedTokens.some((tokenType) => token.type.match(tokenType))) {
       return;
@@ -678,7 +711,7 @@ export default class DiffViewElement extends BaseElement {
     }
 
     const newToken = new Token(
-      `light-character-diff--${data.type}`,
+      `character-diff--${data.type}`,
       currentContent,
     );
 

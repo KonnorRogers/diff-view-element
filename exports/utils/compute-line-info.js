@@ -88,7 +88,7 @@ export const DiffMethod = /** @type {const} */ ({
  * Splits diff text by new line and computes final list of diff lines based on
  * conditions.
  *
- * @param {string} value Diff text from the js diff module.
+ * @param {string} value - Diff text from the js diff module.
  * @returns {string[]}
  */
 const constructLines = (value) => {
@@ -107,6 +107,7 @@ const constructLines = (value) => {
   const firstLine = lines[0];
   // Remove the first and last element if they are new line character. This is
   // to avoid addition of extra new line in the UI.
+
   if (!lastLine) {
     lines.pop();
   }
