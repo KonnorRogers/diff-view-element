@@ -1,4 +1,5 @@
 import "diff-view-element";
+import "./src/codepen-button.js"
 import "../styles/index.css";
 import { Application } from "@hotwired/stimulus";
 

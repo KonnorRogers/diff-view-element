@@ -15,12 +15,17 @@ title: <diff-view-element>
     <diff-view-element
       language="javascript"
       oldValue="const x = 'Hello World'"
-      newValue="const y = 'Hello Moto'
-console.log(y)"
+      newValue="
+const y = 'Hello Moto'
+console.log(y)
+"
     >
+
     </diff-view-element>
   </script>
 </light-preview>
+
+### The same example without preserved whitespace
 
 ### A large example
 
@@ -92,6 +97,8 @@ Content can be slotted in using `<script type="text/plain">` tags. Do note, it w
 
 As for why a `<script type="text/plain">` is preferred, check out the docs on ["Why Script Tags"](/references/why-script-tags/)
 
+Slotted content will have extra leading / trailing whitespace stripped, will be "dedented" for you.
+
 <light-preview
   preview-mode="shadow-dom"
   script-scope="shadow-dom"
@@ -113,7 +120,7 @@ As for why a `<script type="text/plain">` is preferred, check out the docs on ["
 
 ### Preserving whitespace
 
-Whitespace can be preserved by using `preserve-whitespace` which will also preserve leading / trailing new lines.
+Whitespace can be preserved by using `preserve-whitespace` which will also preserve leading / trailing new lines as well as disable "dedenting" of the strings.
 
 <light-preview
   preview-mode="shadow-dom"
@@ -141,9 +148,10 @@ Whitespace can be preserved by using `preserve-whitespace` which will also prese
 
 ## Future ideas
 
-- [ ] - "Unified view"
+- [ ] - "Unified view" where diffs are rendered inline instead of 2 different views
 - [ ] - Render functions for additional things like buttons
-- [ ] - Render diff between 2 elements
 - [ ] - Code folding
 
-Got an idea? I'd love to hear it.
+Got an idea? I'd love to hear it!
+
+<https://github.com/KonnorRogers/diff-view-element/issues>

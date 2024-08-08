@@ -65,14 +65,18 @@ export const componentStyles = css`
   }
 
   [part~="diff-marker"] {
-    padding-inline-start: 4px;
     text-align: center;
     user-select: none;
     font-variant-numeric: tabular-nums;
+    width: calc(1ch + 8px);
+    padding-inline-start: 8px;
   }
 
   [part~="diff-marker"]::after {
     content: " ";
+    width: max-content;
+    max-width: max-content;
+    min-width: max-content;
   }
 
   [part~="diff-marker"][part~="diff-marker-deleted"]::after {

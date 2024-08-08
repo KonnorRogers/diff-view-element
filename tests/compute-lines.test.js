@@ -5,7 +5,7 @@ import {
 } from "diff-view-element/exports/utils/compute-line-info.js";
 
 suite("Testing compute lines utils", () => {
-  test("Should it avoid trailing spaces", () => {
+  test("It should not avoid trailing space", () => {
     const oldCode = `test
 
 
@@ -16,20 +16,75 @@ suite("Testing compute lines utils", () => {
 
     assert.deepEqual(computeLineInformation(oldCode, newCode), {
       lineInformation: [
-        {
-          left: {
-            lineNumber: 1,
-            type: "default",
-            value: "test",
+           {
+             "left": {
+               "lineNumber": 1,
+               "type": "default",
+               "value": "test",
+             },
+             "right": {
+               "lineNumber": 1,
+               "type": "default",
+               "value": "test",
+             }
+           },
+          {
+            "left": {
+              "lineNumber": 2,
+              "type": "default",
+              "value": ""
+            },
+            "right": {
+              "lineNumber": 2,
+              "type": "default",
+              "value": ""
+            }
           },
-          right: {
-            lineNumber: 1,
-            type: "default",
-            value: "test",
+          {
+            "left": {
+              "lineNumber": 3,
+              "type": "default",
+              "value": "",
+            },
+            "right": {
+              "lineNumber": 3,
+              "type": "default",
+              "value": "",
+            },
           },
-        },
+          {
+            "left": {
+              "lineNumber": 4,
+              "type": "removed",
+              "value": "",
+            },
+            "right": {},
+          },
+          {
+            "left": {
+              "lineNumber": 5,
+              "type": "removed",
+              "value": "",
+            },
+            "right": {}
+          },
+          {
+            "left": {
+              "lineNumber": 6,
+              "type": "default",
+              "value": "    ",
+            },
+            "right": {
+              "lineNumber": 4,
+              "type": "default",
+              "value": "    "
+            }
+          },
       ],
-      diffLines: [],
+      diffLines: [
+        3,
+        4
+      ],
     });
   });
 

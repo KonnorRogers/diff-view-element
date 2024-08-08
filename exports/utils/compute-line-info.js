@@ -189,7 +189,7 @@ const computeLineInformation = (
   compareMethod = DiffMethod.CHARS,
   linesOffset = 0,
 ) => {
-  const diffArray = diff.diffLines(oldString.trimEnd(), newString.trimEnd(), {
+  const diffArray = diff.diffLines(oldString, newString, {
     newlineIsToken: true,
     ignoreWhitespace: false,
     ignoreCase: false,

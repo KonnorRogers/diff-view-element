@@ -4,6 +4,7 @@ class Builders::Inspectors < SiteBuilder
       grab_headers(document)
       mark_external(document)
       syntax_highlight(document)
+      add_codepen_buttons(document)
     end
   end
 
@@ -89,6 +90,21 @@ class Builders::Inspectors < SiteBuilder
       # list = document.create_element("ul", "", class: "side-nav__category-menu")
       # list << item
       # mobile_menu.before list
+    end
+  end
+
+  def add_codepen_buttons(document)
+    preview = document.css("light-preview")
+
+    preamble = <<~HTML
+<script type="module">
+  import "diff-view-element"
+</script>
+
+HTML
+
+    preview.each do |el|
+      el << %(<codepen-button slot="actions" preamble="#{CGI.escapeHTML(preamble)}"></codepen-button>)
     end
   end
 end

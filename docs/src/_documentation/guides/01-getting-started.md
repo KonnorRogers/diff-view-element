@@ -34,4 +34,16 @@ import "diff-view-element"; // Will register `<diff-viewer>` for you
 <diff-view-element oldValue="abcd" newValue="abce"></diff-view-element>
 ```
 
+<light-preview
+  preview-mode="shadow-dom"
+  script-scope="shadow-dom"
+>
+  <script slot="code" type="text/plain">
+    <diff-view-element
+      oldValue="abcd"
+      newValue="abce"
+    ></diff-view-element>
+  </script>
+</light-preview>
+
 <!-- <%%= component_list %> -->

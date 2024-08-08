@@ -28,9 +28,9 @@ class CustomToken extends Token {
     super(...args);
 
     /**
-     * @type {number}
+     * @type {null | number}
      */
-    this.lineNumber = 0;
+    this.lineNumber = null;
   }
 }
 
@@ -171,6 +171,24 @@ export default class DiffViewElement extends BaseElement {
   }
 
   /**
+    * @override
+   * @param {import("lit").PropertyValues<typeof DiffViewElement["properties"]>} changedProperties
+   */
+  willUpdate(changedProperties) {
+    if (!this.preserveWhitespace) {
+      if (this.oldValue && changedProperties.has("oldValue")) {
+        // this.oldValue = dedent(this.oldValue.trim());
+      }
+
+      if (this.newValue && changedProperties.has("newValue")) {
+        // this.newValue = dedent(this.newValue.trim());
+      }
+    }
+
+    return super.willUpdate(changedProperties)
+  }
+
+  /**
    * @param {Event} e
    */
   handleSlottedValues (e) {
@@ -179,10 +197,6 @@ export default class DiffViewElement extends BaseElement {
 
     let elements = slot.assignedElements({ flatten: true });
     let value = this.unescapeTags(elementsToString(...elements));
-
-    if (!this.preserveWhitespace) {
-      value = dedent(value.trim());
-    }
 
     if (slot.name === "old-value") {
       this.oldValue = value
@@ -288,8 +302,10 @@ export default class DiffViewElement extends BaseElement {
 
   /**
    * A plugin for Prism to add line numbers.
+   * @param {import("../../utils/compute-line-info.js").LineInformation[]} lineInfo
+   * @param {"right" | "left"} side
    */
-  lineNumberPlugin() {
+  lineNumberPlugin(lineInfo, side) {
     let lineCount = 0;
 
     return LineNumberPlugin({
@@ -300,22 +316,27 @@ export default class DiffViewElement extends BaseElement {
         tokens.push(row);
 
 
-        if (ary.length <= 0) {
-          /** @type {import("prism-esm/prism-core.js").TokenStream} */ (
-            row.content
-          ).push(
-            new CustomToken("gutter-cell", ""),
-            new CustomToken("diff-marker", ""),
-            new CustomToken("diff-line", " "),
-          );
-          return;
-        }
+        // console.log(ary)
+        // if (ary.length <= 0) {
+        //   /** @type {import("prism-esm/prism-core.js").TokenStream} */ (
+        //     row.content
+        //   ).push(
+        //     new CustomToken("gutter-cell", ""),
+        //     new CustomToken("diff-marker", ""),
+        //     new CustomToken("diff-line", " "),
+        //   );
+        //   return;
+        // }
 
-        const tokensIndex = lineCount++;
+        const lineData = lineInfo[index]
+        if (!lineData) { return }
+
+        const lineNumber = lineData[side]?.lineNumber
+        const lineExists = lineNumber != null
 
         const lineTokens = [
           new CustomToken("gutter-cell",
-            [new CustomToken("line-number", (tokensIndex + this.lineNumberStart).toString())],
+            [new CustomToken("line-number", lineExists ? (lineNumber).toString() : "")],
           ),
           new CustomToken("diff-marker", ""),
           new CustomToken("diff-line", ary),
@@ -323,7 +344,7 @@ export default class DiffViewElement extends BaseElement {
 
         // Add line numbers so we can easily add diffs.
         lineTokens.forEach((token) => {
-          token.lineNumber = tokensIndex + 1;
+          token.lineNumber = lineExists ? lineNumber : null;
 
           if (Array.isArray(row.content)) {
             row.content.push(token);
@@ -333,13 +354,15 @@ export default class DiffViewElement extends BaseElement {
     });
   }
   /**
-    * a "wrap" plugin for Prism to add parts.
+    * a "wrap" plugin for Prism to add parts to ever token.
     * @param {any} env
     */
   diffPartPlugin (env) {
     const cells = ["diff-line", "diff-marker", "gutter-cell"];
 
-    if (cells.some((str) => env.type.match(str))) {
+    const isTableCell = cells.some((str) => env.type.match(str))
+
+    if (isTableCell) {
       env.tag = "td";
     }
 
@@ -350,6 +373,12 @@ export default class DiffViewElement extends BaseElement {
       // part="character-diff character-diff--{removed|added}"
       env.attributes["part"] = `${base} ${base}--${diffType}`;
     }
+
+    // We dont need to add parts for our own custom tokens.
+    if (env.type.startsWith("character-diff") || isTableCell) { return }
+
+    // These are all tokens from Prism. Map their class name to a part for easy themeing.
+    env.attributes["part"] = `token ${env.type}`;
   }
 
   /**
@@ -407,13 +436,15 @@ export default class DiffViewElement extends BaseElement {
       this.highlighter,
       {
         afterTokenize: [
-          this.lineNumberPlugin(),
+          this.lineNumberPlugin(lineInfo, "left"),
           (env) => {
             env.tokens.forEach((wrapperToken) => {
               /** @type {CustomToken[]} */ (
                 /** @type {Token} */ (wrapperToken).content
               ).forEach((token) => {
                 if (typeof token === "string") return;
+
+                if (token.lineNumber === null) { return }
 
                 if (leftObj.deletedLines.has(token.lineNumber)) {
                   token.type += " deleted";
@@ -432,7 +463,7 @@ export default class DiffViewElement extends BaseElement {
         return;
       }
 
-      if (!data) {
+      if (data == null) {
         return;
       }
 
@@ -455,7 +486,7 @@ export default class DiffViewElement extends BaseElement {
       this.highlighter,
       {
         afterTokenize: [
-          this.lineNumberPlugin(),
+          this.lineNumberPlugin(lineInfo, "right"),
           (env) => {
             env.tokens.forEach((wrapperToken) => {
               /** @type {CustomToken[]} */ (
@@ -463,6 +494,7 @@ export default class DiffViewElement extends BaseElement {
               ).forEach((token) => {
                 if (typeof token === "string") return;
 
+                if (token.lineNumber === null) { return }
                 if (rightObj.insertedLines.has(token.lineNumber)) {
                   token.type += " inserted";
                 }
@@ -473,6 +505,8 @@ export default class DiffViewElement extends BaseElement {
       },
     );
 
+    this.lineInfo = lineInfo
+
     rightEnv.tokens.forEach((token, index) => {
       const data = lineInfo[index]?.right?.data;
 
@@ -480,7 +514,7 @@ export default class DiffViewElement extends BaseElement {
         return;
       }
 
-      if (!data) {
+      if (data == null) {
         return;
       }
 
@@ -510,7 +544,7 @@ export default class DiffViewElement extends BaseElement {
       if (Array.isArray(rightInfo.value)) {
         rightInfo.value = rightInfo.value
           .map((obj, index) => {
-            if (!rightInfo.data) {
+            if (rightInfo.data == null) {
               return;
             }
             rightInfo.data.push(this.toWordData(rightInfo, obj, index));
@@ -529,7 +563,7 @@ export default class DiffViewElement extends BaseElement {
       if (Array.isArray(leftInfo.value)) {
         leftInfo.value = leftInfo.value
           .map((obj, index) => {
-            if (!leftInfo.data) {
+            if (leftInfo.data == null) {
               return;
             }
             leftInfo.data.push(this.toWordData(leftInfo, obj, index));

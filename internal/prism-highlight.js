@@ -26,6 +26,9 @@ import { loader as tsLoader } from "prism-esm/components/prism-typescript.js";
 // TSX
 import { loader as tsxLoader } from "prism-esm/components/prism-tsx.js";
 
+// Markdown
+import { loader as markdownLoader } from "prism-esm/components/prism-markdown.js";
+
 /**
  * @typedef {{ code: string, grammar: import("prism-esm").Grammar, language: string } & { tokens: Array<string | Token>}} Env
  * @typedef {import("prism-esm").HookCallback} HookCallback
@@ -45,7 +48,7 @@ import { loader as tsxLoader } from "prism-esm/components/prism-tsx.js";
 
 export function createPrismInstance() {
   const prism = new PrismJS();
-  markupLoader(prism);
+  markupLoader(prism); // https://github.com/KonnorRogers/prism-esm/blob/a3ef460f67b98840cf354377baaf0868c862e3c8/components/prism-markup.js#L188-L195
   markupTemplatingLoader(prism);
   cssLoader(prism);
   cssExtrasLoader(prism);
@@ -55,7 +58,7 @@ export function createPrismInstance() {
   jsxLoader(prism);
   tsLoader(prism);
   tsxLoader(prism);
-  // markdownLoader(prism)
+  markdownLoader(prism)
   return prism;
 }
 
