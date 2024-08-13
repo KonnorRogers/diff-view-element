@@ -18,4 +18,12 @@ export class BaseElement extends DefineableMixin(LitElement) {
       ctor.define(name);
     });
   }
+
+  /**
+   * Gets directionality of the element
+   * @returns {"ltr" | "rtl"}
+   */
+  getTextDirection () {
+    return this.matches(":dir(rtl)") ? "rtl" : "ltr"
+  }
 }

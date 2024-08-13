@@ -1,4 +1,5 @@
 import "diff-view-element";
+import "./src/stackblitz-button.js"
 import "./src/codepen-button.js"
 import "../styles/index.css";
 import { Application } from "@hotwired/stimulus";
@@ -39,7 +40,7 @@ if (window.Prism) {
   window.Prism.manual = true;
 }
 
-(() => {
+;(() => {
   if (!window.scrollPositions) {
     window.scrollPositions = {};
   }

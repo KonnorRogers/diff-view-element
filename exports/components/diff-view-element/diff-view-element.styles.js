@@ -88,12 +88,10 @@ export const componentStyles = css`
   }
 
   [part~="character-diff"][part~="character-diff--removed"] {
-    padding: 0.2em 0;
     background: hsla(353, 95%, 46%, 0.15);
   }
 
   [part~="character-diff"][part~="character-diff--added"] {
-    padding: 0.2em 0;
     background: hsla(137, 100%, 75%);
   }
 `;

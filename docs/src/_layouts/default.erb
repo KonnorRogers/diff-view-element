@@ -1,6 +1,7 @@
 <!doctype html>
 <html class="sl-theme-light" lang="<%= site.locale %>">
   <head>
+    <meta name="version-number" content="<%= version_number %>">
     <%= render "head", metadata: site.metadata, title: resource.data.title %>
   </head>
   <body class='<%= "#{resource.data.layout} #{resource.data.page_class}" %>' data-controller="search">

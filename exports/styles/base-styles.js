@@ -7,6 +7,12 @@ export const baseStyles = css`
     box-sizing: border-box;
   }
 
+  :host(:dir(rtl)) *,
+  :host(:dir(rtl)) *:after,
+  :host(:dir(rtl)) *:before {
+    direction: rtl;
+  }
+
   .visually-hidden:not(:focus-within) {
     position: absolute;
     overflow: hidden;

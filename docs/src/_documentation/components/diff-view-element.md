@@ -6,6 +6,7 @@ title: <diff-view-element>
 
 ## Examples
 
+
 <light-preview
   preview-mode="shadow-dom"
   script-scope="shadow-dom"
@@ -14,8 +15,26 @@ title: <diff-view-element>
   <script slot="code" type="text/plain">
     <diff-view-element
       language="javascript"
-      oldValue="const x = 'Hello World'"
-      newValue="
+      line-number-start="35"
+      old-value="const x = 'Hello World'"
+      new-value="const y = 'Hello Moto'
+    console.log(y)"
+    ></diff-view-element>
+  </script>
+</light-preview>
+
+
+
+<light-preview
+  preview-mode="shadow-dom"
+  script-scope="shadow-dom"
+>
+
+  <script slot="code" type="text/plain">
+    <diff-view-element
+      language="javascript"
+      old-value="const x = 'Hello World'"
+      new-value="
 const y = 'Hello Moto'
 console.log(y)
 "
@@ -64,8 +83,8 @@ Line numbers can be disabled by adding the `disable-line-numbers` attribute.
     <diff-view-element
       language="javascript"
       disable-line-numbers=""
-      oldValue="const x = 'Hello World'"
-      newValue="const y = 'Hello Moto'
+      old-value="const x = 'Hello World'"
+      new-value="const y = 'Hello Moto'
 console.log(y)"
     ></diff-view-element>
   </script>
@@ -84,8 +103,8 @@ The starting line number can be changed by using the `line-number-start` attribu
     <diff-view-element
       language="javascript"
       line-number-start="35"
-      oldValue="const x = 'Hello World'"
-      newValue="const y = 'Hello Moto'
+      old-value="const x = 'Hello World'"
+      new-value="const y = 'Hello Moto'
 console.log(y)"
     ></diff-view-element>
   </script>

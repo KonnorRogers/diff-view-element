@@ -1,10 +1,11 @@
+require "json"
 class Builders::Inspectors < SiteBuilder
   def build
     inspect_html do |document|
       grab_headers(document)
       mark_external(document)
       syntax_highlight(document)
-      add_codepen_buttons(document)
+      add_preview_buttons(document)
     end
   end
 
@@ -93,18 +94,23 @@ class Builders::Inspectors < SiteBuilder
     end
   end
 
-  def add_codepen_buttons(document)
+  def add_preview_buttons(document)
     preview = document.css("light-preview")
 
-    preamble = <<~HTML
-<script type="module">
-  import "diff-view-element"
-</script>
-
-HTML
-
     preview.each do |el|
-      el << %(<codepen-button slot="actions" preamble="#{CGI.escapeHTML(preamble)}"></codepen-button>)
+      id = "checkbox-" + SecureRandom.uuid.slice(0, 16).to_s
+      html = <<~HTML
+        <div slot="before-expanded-code" style="display: grid; grid-auto-flow: column;">
+          <codepen-button></codepen-button>
+          <stackblitz-button></stackblitz-button>
+          <form-control>
+            <input id="#{id}" type="checkbox" data-controller="direction-switcher">
+            <label for="#{id}" aria-label="Toggle right to left">RTL</label>
+          </form-control>
+        </div>
+      HTML
+
+      el << html
     end
   end
 end

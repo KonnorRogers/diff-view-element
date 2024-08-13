@@ -67,8 +67,8 @@ export default class DiffViewElement extends BaseElement {
    */
   static properties = /** @type {const} */ ({
     view: {},
-    newValue: {},
-    oldValue: {},
+    newValue: {attribute: "new-value"},
+    oldValue: {attribute: "old-value"},
 
     disableHighlight: { type: Boolean, attribute: "disable-highlight" },
     preserveWhitespace: { type: Boolean, attribute: "preserve-whitespace" },
@@ -177,11 +177,11 @@ export default class DiffViewElement extends BaseElement {
   willUpdate(changedProperties) {
     if (!this.preserveWhitespace) {
       if (this.oldValue && changedProperties.has("oldValue")) {
-        // this.oldValue = dedent(this.oldValue.trim());
+        this.oldValue = dedent(this.oldValue.trim());
       }
 
       if (this.newValue && changedProperties.has("newValue")) {
-        // this.newValue = dedent(this.newValue.trim());
+        this.newValue = dedent(this.newValue.trim());
       }
     }
 

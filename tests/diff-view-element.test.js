@@ -15,8 +15,8 @@ suite("<diff-view-element>", () => {
     const el = await fixture(
       html` <diff-view-element
         language="javascript"
-        oldValue="const x = 'Hello World'"
-        newValue="const y = 'Hello Moto'
+        old-value="const x = 'Hello World'"
+        new-value="const y = 'Hello Moto'
 console.log(y)"
       ></diff-view-element>`,
     );
@@ -105,8 +105,8 @@ console.log(y)"
       html` <diff-view-element
         language="javascript"
         line-number-start="35"
-        oldValue="const x = 'Hello World'"
-        newValue="const y = 'Hello Moto'
+        old-value="const x = 'Hello World'"
+        new-value="const y = 'Hello Moto'
 console.log(y)"
       ></diff-view-element>`,
     );
