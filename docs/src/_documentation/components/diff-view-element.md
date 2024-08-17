@@ -6,25 +6,6 @@ title: <diff-view-element>
 
 ## Examples
 
-
-<light-preview
-  preview-mode="shadow-dom"
-  script-scope="shadow-dom"
->
-
-  <script slot="code" type="text/plain">
-    <diff-view-element
-      language="javascript"
-      line-number-start="35"
-      old-value="const x = 'Hello World'"
-      new-value="const y = 'Hello Moto'
-    console.log(y)"
-    ></diff-view-element>
-  </script>
-</light-preview>
-
-
-
 <light-preview
   preview-mode="shadow-dom"
   script-scope="shadow-dom"
@@ -43,8 +24,6 @@ console.log(y)
     </diff-view-element>
   </script>
 </light-preview>
-
-### The same example without preserved whitespace
 
 ### A large example
 

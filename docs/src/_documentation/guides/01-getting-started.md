@@ -3,7 +3,7 @@ title: Getting Started
 permalink: /guides/getting-started/
 ---
 
-## Installation
+## NPM Installation
 
 ```bash
 npm install diff-view-element
@@ -20,18 +20,18 @@ import "diff-view-element"; // Will register `<diff-viewer>` for you
 
 ```html
 <script type="module">
-  import "https://esm.run/diff-view-element";
+  import "https://cdn.jsdelivr.net/npm/diff-view-element";
 
   // Loading a version range. This will load the latest >= 1.0.0 and < 2.0.0 of diff-view-element.
-  import "https://esm.run/diff-view-element@^1.0.0";
+  import "https://cdn.jsdelivr.net/npm/diff-view-element@^1.0.0";
 
   // Loading a specific version. This will only load v1.0.0
-  import "https://esm.run/diff-view-element@1.0.0";
+  import "https://cdn.jsdelivr.net/npm/diff-view-element@1.0.0";
 </script>
 ```
 
 ```html
-<diff-view-element oldValue="abcd" newValue="abce"></diff-view-element>
+<diff-view-element old-value="abcd" new-value="abce"></diff-view-element>
 ```
 
 <light-preview
@@ -40,8 +40,8 @@ import "diff-view-element"; // Will register `<diff-viewer>` for you
 >
   <script slot="code" type="text/plain">
     <diff-view-element
-      oldValue="abcd"
-      newValue="abce"
+      old-value="abcd"
+      new-value="abce"
     ></diff-view-element>
   </script>
 </light-preview>

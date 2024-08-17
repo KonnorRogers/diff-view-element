@@ -1,9 +1,7 @@
 import { html } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { Token } from "prism-esm";
-// import { getDiffableHTML } from '@open-wc/semantic-dom-diff/get-diffable-html.js';
 
-import { BaseElement } from "../../../internal/base-element.js";
 import { baseStyles } from "../../styles/base-styles.js";
 import { componentStyles } from "./diff-view-element.styles.js";
 import { theme } from "../../styles/default-theme.styles.js";
@@ -14,11 +12,9 @@ import {
   createPrismInstance,
   PrismEnv,
 } from "../../../internal/prism-highlight.js";
-import { replaceLast } from "../../../internal/replace-functions.js";
 import { LineNumberPlugin } from "../../../internal/line-number-plugin.js";
 import { LineHighlightWrapPlugin } from "../../../internal/line-highlight-plugin.js";
-import { elementsToString } from "../../../internal/elements-to-strings.js";
-import { dedent } from "../../../internal/dedent.js";
+import BasicDiffViewElement from "../basic-diff-view-element/basic-diff-view-element-register.js";
 
 class CustomToken extends Token {
   /**
@@ -51,7 +47,7 @@ class CustomToken extends Token {
  * @status experimental
  * @since 1.0
  */
-export default class DiffViewElement extends BaseElement {
+export default class DiffViewElement extends BasicDiffViewElement {
   /**
    * @override
    */
@@ -171,68 +167,7 @@ export default class DiffViewElement extends BaseElement {
   }
 
   /**
-    * @override
-   * @param {import("lit").PropertyValues<typeof DiffViewElement["properties"]>} changedProperties
-   */
-  willUpdate(changedProperties) {
-    if (!this.preserveWhitespace) {
-      if (this.oldValue && changedProperties.has("oldValue")) {
-        this.oldValue = dedent(this.oldValue.trim());
-      }
-
-      if (this.newValue && changedProperties.has("newValue")) {
-        this.newValue = dedent(this.newValue.trim());
-      }
-    }
-
-    return super.willUpdate(changedProperties)
-  }
-
-  /**
-   * @param {Event} e
-   */
-  handleSlottedValues (e) {
-    const slot = e.target
-    if (!(slot instanceof HTMLSlotElement)) { return }
-
-    let elements = slot.assignedElements({ flatten: true });
-    let value = this.unescapeTags(elementsToString(...elements));
-
-    if (slot.name === "old-value") {
-      this.oldValue = value
-    }
-
-    if (slot.name === "new-value") {
-      this.newValue = value
-    }
-  }
-
-  /**
    * @override
-   */
-  render() {
-    const computedLines = computeLineInformation(this.oldValue, this.newValue);
-
-    return html`
-      <div part="base">
-        <pre
-          part="pre pre-${this.language}"
-          class="diff-highlight language-${this.language}"
-          style="overflow: auto; max-width: 100%; min-width: 100%; overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap;"
-        ><code
-            part="code code-${this.language}"
-            class="language-${this.language}"
-	    style="white-space: inherit;"><table><tbody>${
-	      this.renderDiff(computedLines)
-	    }</tbody></table></code></pre>
-      </div>
-
-      <slot name="old-value" hidden @slotchange=${this.handleSlottedValues}></slot>
-      <slot name="new-value" hidden @slotchange=${this.handleSlottedValues}></slot>
-    `;
-  }
-
-  /**
    * @param {ReturnType<typeof computeLineInformation>} data
    */
   renderDiff(data) {
@@ -256,48 +191,11 @@ export default class DiffViewElement extends BaseElement {
   }
 
   /**
+   * @override
    * @param {import("../../utils/compute-line-info.js").DiffInformation} diffInfo
    */
   renderLine(diffInfo) {
     return html`${unsafeHTML(/** @type {string} */ (diffInfo.value))}`;
-  }
-
-  /**
-   * @param {import("../../utils/compute-line-info.js").DiffInformation} obj
-   */
-  renderWord(obj) {
-    return obj.value;
-  }
-
-  /**
-   * @param {import("../../utils/compute-line-info.js").DiffInformation} diffInfo - diff info for right or light
-   * @param {import("../../utils/compute-line-info.js").DiffInformation} diffInfoLine - diffInfo.value for right / left
-   * @param {number} index
-   * @returns {LineDiffData}
-   */
-  toWordData(diffInfo, diffInfoLine, index) {
-    const offsetValue =
-      /** @type {import("../../utils/compute-line-info.js").DiffInformation[]} */ (
-        diffInfo.value
-      )
-        .slice(0, index)
-        .map((obj) => obj.value || "")
-        .join("") || "";
-
-    const value =
-      /** @type {import("../../utils/compute-line-info.js").DiffInformation[]} */ (
-        diffInfo.value
-      )
-        .map((obj) => obj.value || "")
-        .join("") || "";
-
-    return {
-      length: /** @type {string} */ (diffInfoLine.value).length,
-      type: diffInfoLine.type || /** @type {"empty"} */ ("empty"),
-      offset: offsetValue.length,
-      offsetValue,
-      value,
-    };
   }
 
   /**
@@ -306,27 +204,12 @@ export default class DiffViewElement extends BaseElement {
    * @param {"right" | "left"} side
    */
   lineNumberPlugin(lineInfo, side) {
-    let lineCount = 0;
-
     return LineNumberPlugin({
       lineNumberStart: this.lineNumberStart,
       callback: (ary, index, tokens) => {
         // This token won't get used, but makes it easy to render things based on array index.
         const row = new Token("row", []);
         tokens.push(row);
-
-
-        // console.log(ary)
-        // if (ary.length <= 0) {
-        //   /** @type {import("prism-esm/prism-core.js").TokenStream} */ (
-        //     row.content
-        //   ).push(
-        //     new CustomToken("gutter-cell", ""),
-        //     new CustomToken("diff-marker", ""),
-        //     new CustomToken("diff-line", " "),
-        //   );
-        //   return;
-        // }
 
         const lineData = lineInfo[index]
         if (!lineData) { return }
@@ -336,7 +219,7 @@ export default class DiffViewElement extends BaseElement {
 
         const lineTokens = [
           new CustomToken("gutter-cell",
-            [new CustomToken("line-number", lineExists ? (lineNumber).toString() : "")],
+            [new CustomToken("line-number", lineExists ? (lineNumber + this.lineNumberStart - 1).toString() : "")],
           ),
           new CustomToken("diff-marker", ""),
           new CustomToken("diff-line", ary),
@@ -529,72 +412,6 @@ export default class DiffViewElement extends BaseElement {
       );
       lineInfo[index].right.value = line;
     });
-  }
-
-  /**
-   * @param {import("../../utils/compute-line-info.js").LineInformation[]} lineInformation
-   */
-  transformLineInformation(lineInformation) {
-    const finalRight = [];
-    const finalLeft = [];
-    lineInformation.forEach((lineInfo) => {
-      const rightInfo = lineInfo.right;
-      rightInfo.data = [];
-
-      if (Array.isArray(rightInfo.value)) {
-        rightInfo.value = rightInfo.value
-          .map((obj, index) => {
-            if (rightInfo.data == null) {
-              return;
-            }
-            rightInfo.data.push(this.toWordData(rightInfo, obj, index));
-            return this.renderWord(obj);
-          })
-          .join("");
-      } else {
-        rightInfo.value = rightInfo.value || "";
-      }
-
-      finalRight.push(rightInfo.value);
-
-      const leftInfo = lineInfo.left;
-      leftInfo.data = [];
-
-      if (Array.isArray(leftInfo.value)) {
-        leftInfo.value = leftInfo.value
-          .map((obj, index) => {
-            if (leftInfo.data == null) {
-              return;
-            }
-            leftInfo.data.push(this.toWordData(leftInfo, obj, index));
-            return this.renderWord(obj);
-          })
-          .join("");
-      } else {
-        leftInfo.value = leftInfo.value || "";
-      }
-
-      finalLeft.push(leftInfo.value);
-    });
-    // Both right and left are now arrays of strings.
-  }
-
-  /**
-   * Only used to unescape `&lt;/script>` into `</script>` from slotted content.
-   * @internal
-   * @param {string} text
-   */
-  unescapeTags(text) {
-    const unescapeRegex = /&lt;\/script>/g;
-    if (this.unescapeBehavior === "last") {
-      return replaceLast(text, unescapeRegex);
-    }
-
-    if (this.unescapeBehavior === "all") {
-      return text.replaceAll(unescapeRegex, "</$1>");
-    }
-
-    return text;
   }
 
   /**

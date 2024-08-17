@@ -3,11 +3,12 @@
  */
 const TAB_LENGTH = 2
 
-const INDENT_REGEXP = new RegExp(`\n(\t| {${TAB_LENGTH}})`)
+const INDENT_REGEXP = new RegExp(`(\t| {${TAB_LENGTH}})`)
 
 /**
  * @param {TemplateStringsArray|string} templateStrings
  * @param {any[]} values
+ * @returns {string}
  */
 export function dedent(templateStrings, ...values) {
   let matches = [];
@@ -16,7 +17,7 @@ export function dedent(templateStrings, ...values) {
       ? [templateStrings]
       : templateStrings.slice();
 
-  let string
+  let string = ""
 
   function interpolate () {
     string = strings[0];
@@ -35,14 +36,13 @@ export function dedent(templateStrings, ...values) {
   for (let i = 0; i < strings.length; i++) {
     let match;
 
-    // If any new line starts without any indentation, mark it as not dedentable, and then break the loop.
-    if (strings[i].match(/\n[\t ]/)) {
+    // If any new line starts without any indentation and not an empty string, mark it as not dedentable, and then break the loop.
+    if (strings[i].trim() && strings[i].match(/\n[^\t ]/)) {
       isDedentable = false
       break;
     }
 
-
-    if ((match = strings[i].match(new RegExp(`${INDENT_REGEXP.source}+`, "g")))) {
+    if ((match = strings[i].match(new RegExp(`\n${INDENT_REGEXP.source}+`, "g")))) {
       matches.push(...match);
     }
   }
@@ -55,10 +55,10 @@ export function dedent(templateStrings, ...values) {
   // 3. Remove the common indentation from all strings.
   if (matches.length) {
     let size = Math.min(...matches.map((value) => value.length - 1));
-    let pattern = new RegExp(`${INDENT_REGEXP.source}{${size}}`, "g");
+    let pattern = new RegExp(`\n(\t| ){${size}}`, "g");
 
     for (let i = 0; i < strings.length; i++) {
-      strings[i] = strings[i].replace(pattern, "\n");
+      strings[i] = strings[i].replaceAll(pattern, "\n");
     }
   }
 

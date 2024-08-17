@@ -95,12 +95,16 @@ export class StackblitzButton extends LitElement {
     return new URL(document.baseURI).host.includes("localhost")
   }
 
+  replaceScriptTags (str) {
+    return str.replaceAll(/&lt;\/script>/g, "</script>")
+  }
+
   connectedCallback () {
     super.connectedCallback()
 
     customElements.whenDefined("light-preview").then(() => {
       setTimeout(async () => {
-        this.files["index.html"] = this.indexHTML(this.closest("light-preview").code)
+        this.files["index.html"] = this.indexHTML(this.replaceScriptTags(this.closest("light-preview").code))
 
         // Vendor files on localhost
         if (this.isLocal) {
@@ -160,7 +164,7 @@ dist-ssr
         "preview": "vite preview"
       },
       "dependencies": {
-        "diff-view-element": ${version}
+        "diff-view-element": "${version}"
       },
       "devDependencies": {
         "vite": "^5.4.0"

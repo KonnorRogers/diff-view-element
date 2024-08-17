@@ -79,8 +79,8 @@ export const theme = css`
   pre[class*="language-"] {
     background: var(--syntax-bg);
     color: var(--syntax-fg);
-    direction: ltr;
-    text-align: left;
+    direction: inherit;
+    text-align: start;
     -webkit-hyphens: none;
     -moz-hyphens: none;
     -ms-hyphens: none;

@@ -135,3 +135,5 @@ internal/**/*.d.ts
 /custom-elements.json
 /_site
 .DS_Store
+/cdn
+/bundles

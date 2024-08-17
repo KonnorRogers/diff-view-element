@@ -32,6 +32,15 @@ Let's for example create a `<diff-view-element>` component and add the `ruby` lo
   <script type="text/plain" slot="code">
     <diff-view-element
       language="ruby"
+
+      old-value="
+        def foo
+          puts 'bar'
+        end"
+      new-value = "
+        def bar
+          puts 'foo'
+        end"
     >
     </diff-view-element>
     <script>
@@ -47,12 +56,6 @@ Let's for example create a `<diff-view-element>` component and add the `ruby` lo
 
         // Force an update
         diffViewElement.requestUpdate()
-        diffViewElement.oldValue = `def foo
-    puts "bar"
-  end`
-        diffViewElement.newValue = `def bar
-    puts "foo"
-  end`
       })()
     &lt;/script>
   </script>
