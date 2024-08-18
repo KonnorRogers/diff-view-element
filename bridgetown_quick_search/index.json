@@ -117,7 +117,7 @@
           "categories": "references",
           "tags": "",
           "url": "/diff-view-element/references/changelog/",
-          "content": "1.0.2 08/18/2024\n\nBug Fix: Add the proper files to the files key in package.json #3\n\n1.0.1 08/18/2024\n\nBug Fix(&lt;basic-diff-view-element&gt;): Fix a whitespace issue caused by Prettier auto formatting. #2"
+          "content": "v1.0.2 08/18/2024\n\nBug Fix: Add the proper files to the files key in package.json #3\n\nv1.0.1 08/18/2024\n\nBug Fix(&lt;basic-diff-view-element&gt;): Fix a whitespace issue caused by Prettier auto formatting. #2"
         },
         {
           "id": "diff-view-element",
