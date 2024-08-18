@@ -32,10 +32,10 @@ class CustomToken extends Token {
   }
 }
 
-const DIFF_CONVERTER = /** @const */ ({
+const DIFF_CONVERTER = /** @const */ {
   added: "inserted",
   removed: "deleted",
-})
+};
 
 /**
  * A diff viewer complete with PrismJS for syntax highlighting.
@@ -59,7 +59,7 @@ export default class DiffViewElement extends BasicDiffViewElement {
   /**
    * @override
    */
-  static get properties () {
+  static get properties() {
     return /** @type {const} */ ({
       ...super.properties,
       highlighter: { attribute: false, state: true },
@@ -90,9 +90,9 @@ export default class DiffViewElement extends BasicDiffViewElement {
    * @override
    * @type {BasicDiffViewElement["transformLineInformation"]}
    */
-  transformLineInformation (lineInfo) {
-    super.transformLineInformation(lineInfo)
-    this.syntaxHighlight(lineInfo)
+  transformLineInformation(lineInfo) {
+    super.transformLineInformation(lineInfo);
+    this.syntaxHighlight(lineInfo);
   }
 
   /**
@@ -116,16 +116,23 @@ export default class DiffViewElement extends BasicDiffViewElement {
         const row = new Token("row", []);
         tokens.push(row);
 
-        const lineData = lineInfo[index]
-        if (!lineData) { return }
+        const lineData = lineInfo[index];
+        if (!lineData) {
+          return;
+        }
 
-        const lineNumber = lineData[side]?.lineNumber
-        const lineExists = lineNumber != null
+        const lineNumber = lineData[side]?.lineNumber;
+        const lineExists = lineNumber != null;
 
         const lineTokens = [
-          new CustomToken("gutter-cell",
-            [new CustomToken("line-number", lineExists ? (lineNumber + this.lineNumberStart - 1).toString() : "")],
-          ),
+          new CustomToken("gutter-cell", [
+            new CustomToken(
+              "line-number",
+              lineExists
+                ? (lineNumber + this.lineNumberStart - 1).toString()
+                : "",
+            ),
+          ]),
           new CustomToken("diff-marker", ""),
           new CustomToken("diff-line", ary),
         ];
@@ -142,14 +149,14 @@ export default class DiffViewElement extends BasicDiffViewElement {
     });
   }
   /**
-    * a "wrap" plugin for Prism to add parts to every token. Useful for external styling.
-    * IE: `<span class="token tag">` becomes `<span class="token tag" part="token tag">`
-    * @param {any} env
-    */
-  diffPartPlugin (env) {
+   * a "wrap" plugin for Prism to add parts to every token. Useful for external styling.
+   * IE: `<span class="token tag">` becomes `<span class="token tag" part="token tag">`
+   * @param {any} env
+   */
+  diffPartPlugin(env) {
     const cells = ["diff-line", "diff-marker", "gutter-cell"];
 
-    const isTableCell = cells.some((str) => env.type.match(str))
+    const isTableCell = cells.some((str) => env.type.match(str));
 
     if (isTableCell) {
       env.tag = "td";
@@ -160,14 +167,18 @@ export default class DiffViewElement extends BasicDiffViewElement {
     if (env.type.startsWith("character-diff")) {
       const [base, diffType] = env.type.split(/--/);
 
-      const type = DIFF_CONVERTER[/** @type {keyof typeof DIFF_CONVERTER} */ (diffType)] || ""
+      const type =
+        DIFF_CONVERTER[/** @type {keyof typeof DIFF_CONVERTER} */ (diffType)] ||
+        "";
 
       // part="character-diff character-diff--{inserted|deleted}"
       env.attributes["part"] = `${base} ${base}--${type}`;
     }
 
     // We dont need to add parts for our own custom tokens.
-    if (env.type.startsWith("character-diff") || isTableCell) { return }
+    if (env.type.startsWith("character-diff") || isTableCell) {
+      return;
+    }
 
     // These are all tokens from Prism. Map their class name to a part for easy theming.
     env.attributes["part"] = `token ${env.type}`;
@@ -213,10 +224,7 @@ export default class DiffViewElement extends BasicDiffViewElement {
       this.highlighter = createPrismInstance();
     }
 
-    this.highlighter.hooks.add(
-      "wrap",
-      this.diffPartPlugin,
-    );
+    this.highlighter.hooks.add("wrap", this.diffPartPlugin);
     this.highlighter.hooks.add(
       "wrap",
       /** @type {any} */ (LineHighlightWrapPlugin()),
@@ -237,7 +245,9 @@ export default class DiffViewElement extends BasicDiffViewElement {
               ).forEach((token) => {
                 if (typeof token === "string") return;
 
-                if (token.lineNumber === null) { return }
+                if (token.lineNumber === null) {
+                  return;
+                }
 
                 if (leftObj.deletedLines.has(token.lineNumber)) {
                   token.type += " deleted";
@@ -287,7 +297,9 @@ export default class DiffViewElement extends BasicDiffViewElement {
               ).forEach((token) => {
                 if (typeof token === "string") return;
 
-                if (token.lineNumber === null) { return }
+                if (token.lineNumber === null) {
+                  return;
+                }
                 if (rightObj.insertedLines.has(token.lineNumber)) {
                   token.type += " inserted";
                 }
@@ -298,7 +310,7 @@ export default class DiffViewElement extends BasicDiffViewElement {
       },
     );
 
-    this.lineInfo = lineInfo
+    this.lineInfo = lineInfo;
 
     rightEnv.tokens.forEach((token, index) => {
       const data = lineInfo[index]?.right?.data;
@@ -471,10 +483,7 @@ export default class DiffViewElement extends BasicDiffViewElement {
       token.touchedIndexes.add(index + 2);
     }
 
-    const newToken = new Token(
-      `character-diff--${data.type}`,
-      currentContent,
-    );
+    const newToken = new Token(`character-diff--${data.type}`, currentContent);
 
     /** @type {Token & { touched: boolean }} */ (newToken).touched = true;
     const newContent = [beforeContent, newToken, afterContent];

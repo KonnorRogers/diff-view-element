@@ -25,13 +25,14 @@ export function LineNumberPlugin(options = {}) {
         return;
       }
 
-      const lineNumberToken = new Token("line-number", (index + lineNumberStart).toString())
-      const gutterToken = new Token("gutter-cell", [
-        lineNumberToken
-      ])
+      const lineNumberToken = new Token(
+        "line-number",
+        (index + lineNumberStart).toString(),
+      );
+      const gutterToken = new Token("gutter-cell", [lineNumberToken]);
       const lineToken = new Token("diff-line", ary);
 
-      tokens.push(gutterToken, lineToken)
+      tokens.push(gutterToken, lineToken);
     };
   }
 

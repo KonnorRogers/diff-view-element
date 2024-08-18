@@ -15,46 +15,46 @@ suite("Testing compute lines utils", () => {
     `;
 
     assert.deepEqual(computeLineInformation(oldCode, newCode), {
-        "lineInformation": [
-          {
-            "right": {
-              "lineNumber": 1,
-              "type": "default",
-              "value": "test"
-            },
-            "left": {
-              "lineNumber": 1,
-              "type": "default",
-              "value": "test"
-            }
+      lineInformation: [
+        {
+          right: {
+            lineNumber: 1,
+            type: "default",
+            value: "test",
           },
-          {
-            "right": {
-              "lineNumber": 2,
-              "type": "default",
-              "value": ""
-            },
-            "left": {
-              "lineNumber": 2,
-              "type": "default",
-              "value": ""
-            }
+          left: {
+            lineNumber: 1,
+            type: "default",
+            value: "test",
           },
-          {
-            "right": {
-              "lineNumber": 3,
-              "type": "default",
-              "value": "    "
-            },
-            "left": {
-              "lineNumber": 3,
-              "type": "default",
-              "value": "    "
-            }
-          }
-        ],
-        "diffLines": []
-    })
+        },
+        {
+          right: {
+            lineNumber: 2,
+            type: "default",
+            value: "",
+          },
+          left: {
+            lineNumber: 2,
+            type: "default",
+            value: "",
+          },
+        },
+        {
+          right: {
+            lineNumber: 3,
+            type: "default",
+            value: "    ",
+          },
+          left: {
+            lineNumber: 3,
+            type: "default",
+            value: "    ",
+          },
+        },
+      ],
+      diffLines: [],
+    });
   });
 
   test("Should identify line addition", () => {

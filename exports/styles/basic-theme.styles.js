@@ -1,4 +1,4 @@
-import { css } from "lit"
+import { css } from "lit";
 
 export const basicTheme = css`
   :host {
@@ -85,4 +85,4 @@ export const basicTheme = css`
   [part~="gutter-cell"][part~="gutter-cell-deleted"] {
     color: var(--syntax-deleted-text-color);
   }
-`
+`;

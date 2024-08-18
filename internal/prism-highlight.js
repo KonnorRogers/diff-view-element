@@ -58,7 +58,7 @@ export function createPrismInstance() {
   jsxLoader(prism);
   tsLoader(prism);
   tsxLoader(prism);
-  markdownLoader(prism)
+  markdownLoader(prism);
   return prism;
 }
 

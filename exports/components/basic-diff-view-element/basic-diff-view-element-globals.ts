@@ -1,9 +1,9 @@
-import type BasicDiffViewElement from "./basic-diff-view-element.js"
+import type BasicDiffViewElement from "./basic-diff-view-element.js";
 
 declare global {
   interface HTMLElementTagNameMap {
-    'basic-diff-view-element': BasicDiffViewElement
+    "basic-diff-view-element": BasicDiffViewElement;
   }
 }
 
-export {}
+export {};

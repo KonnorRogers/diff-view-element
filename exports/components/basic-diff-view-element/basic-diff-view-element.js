@@ -11,10 +11,10 @@ import { elementsToString } from "../../../internal/elements-to-strings.js";
 import { dedent } from "../../../internal/dedent.js";
 import { basicTheme } from "../../styles/basic-theme.styles.js";
 
-const DIFF_CONVERTER = /** @const */ ({
+const DIFF_CONVERTER = /** @const */ {
   added: "inserted",
   removed: "deleted",
-})
+};
 
 /**
  * @typedef {object} LineDiffData
@@ -43,20 +43,16 @@ export default class BasicDiffViewElement extends BaseElement {
   /**
    * @override
    */
-  static styles = [
-    baseStyles,
-    componentStyles,
-    basicTheme,
-  ];
+  static styles = [baseStyles, componentStyles, basicTheme];
 
   /**
    * @override
    */
-  static get properties () {
+  static get properties() {
     return /** @type {const} */ ({
       view: {},
-      newValue: {attribute: "new-value"},
-      oldValue: {attribute: "old-value"},
+      newValue: { attribute: "new-value" },
+      oldValue: { attribute: "old-value" },
 
       preserveWhitespace: { type: Boolean, attribute: "preserve-whitespace" },
       disableLineNumbers: {
@@ -66,8 +62,8 @@ export default class BasicDiffViewElement extends BaseElement {
       },
       lineNumberStart: { type: Number, attribute: "line-number-start" },
       wrap: { reflect: true, attribute: "wrap" },
-      language: { reflect: true }
-    })
+      language: { reflect: true },
+    });
   }
 
   constructor() {
@@ -143,54 +139,65 @@ export default class BasicDiffViewElement extends BaseElement {
    * Remove the "active-side" from the table element
    * @param {PointerEvent} e
    */
-  handleTablePointerUp (e) {
-    const table = this.shadowRoot?.querySelector("table")
+  handleTablePointerUp(e) {
+    const table = this.shadowRoot?.querySelector("table");
 
-    if (!table) { return }
+    if (!table) {
+      return;
+    }
 
-    table.removeAttribute("active-side")
+    table.removeAttribute("active-side");
   }
-
 
   /**
    * Handles "pointerdown" events on the table. This is used for determined what side is "active" so that you could only ever "select" one side of the diff.
    * @param {PointerEvent} e
    */
-  handleTablePointerDown (e) {
-    const table = this.shadowRoot?.querySelector("table")
+  handleTablePointerDown(e) {
+    const table = this.shadowRoot?.querySelector("table");
 
-    if (!table) { return }
+    if (!table) {
+      return;
+    }
 
-    const composedPath = e.composedPath()
+    const composedPath = e.composedPath();
 
     // <td>
-    const td = /** @type {Element | null} */ (composedPath.find((el) => /** @type {Element} */ (el).tagName?.toLowerCase() === "td"))
+    const td = /** @type {Element | null} */ (
+      composedPath.find(
+        (el) => /** @type {Element} */ (el).tagName?.toLowerCase() === "td",
+      )
+    );
 
     // <tr>
-    const tr = /** @type {Element | null} */ (composedPath.find((el) => /** @type {Element} */ (el).tagName?.toLowerCase() === "tr"))
+    const tr = /** @type {Element | null} */ (
+      composedPath.find(
+        (el) => /** @type {Element} */ (el).tagName?.toLowerCase() === "tr",
+      )
+    );
 
     if (!tr) {
-      table.removeAttribute("active-side")
-      return
+      table.removeAttribute("active-side");
+      return;
     }
     if (!td) {
-      table.removeAttribute("active-side")
-      return
+      table.removeAttribute("active-side");
+      return;
     }
 
-    const index = [...tr.querySelectorAll("td")].findIndex((el) => el === td)
+    const index = [...tr.querySelectorAll("td")].findIndex((el) => el === td);
 
-    if (index < 0 ) {
-      table.removeAttribute("active-side")
-      return
+    if (index < 0) {
+      table.removeAttribute("active-side");
+      return;
     }
 
     if (index < 3) {
-      table.setAttribute("active-side", "left")
-      return
+      table.setAttribute("active-side", "left");
+      return;
     }
 
-    table.setAttribute("active-side", "right")
+    table.setAttribute("active-side", "right");
   }
 
   /**
@@ -208,26 +215,28 @@ export default class BasicDiffViewElement extends BaseElement {
       }
     }
 
-    return super.willUpdate(changedProperties)
+    return super.willUpdate(changedProperties);
   }
 
   /**
    * Turns slotted elements into strings to be consumed by oldValue / newValue.
    * @param {Event} e
    */
-  handleSlottedValues (e) {
-    const slot = e.target
-    if (!(slot instanceof HTMLSlotElement)) { return }
+  handleSlottedValues(e) {
+    const slot = e.target;
+    if (!(slot instanceof HTMLSlotElement)) {
+      return;
+    }
 
     let elements = slot.assignedElements({ flatten: true });
     let value = this.unescapeTags(elementsToString(...elements));
 
     if (slot.name === "old-value") {
-      this.oldValue = value
+      this.oldValue = value;
     }
 
     if (slot.name === "new-value") {
-      this.newValue = value
+      this.newValue = value;
     }
   }
 
@@ -250,13 +259,21 @@ export default class BasicDiffViewElement extends BaseElement {
               part="table"
               @pointerdown=${this.handleTablePointerDown}
               @pointerup=${this.handleTablePointerUp}
-            ><tbody part="table-body">${
-	      this.renderDiff(computedLines)
-	    }</tbody></table></code></pre>
+            ><tbody part="table-body">${this.renderDiff(
+          computedLines,
+        )}</tbody></table></code></pre>
       </div>
 
-      <slot name="old-value" hidden @slotchange=${this.handleSlottedValues}></slot>
-      <slot name="new-value" hidden @slotchange=${this.handleSlottedValues}></slot>
+      <slot
+        name="old-value"
+        hidden
+        @slotchange=${this.handleSlottedValues}
+      ></slot>
+      <slot
+        name="new-value"
+        hidden
+        @slotchange=${this.handleSlottedValues}
+      ></slot>
     `;
   }
 
@@ -288,29 +305,33 @@ export default class BasicDiffViewElement extends BaseElement {
    * @param {import("../../utils/compute-line-info.js").DiffInformation} diffInfo
    */
   renderLine(diffInfo) {
-    let lineNumber = ""
+    let lineNumber = "";
 
     if (diffInfo.lineNumber != null) {
-      lineNumber = (diffInfo.lineNumber + this.lineNumberStart - 1).toString()
+      lineNumber = (diffInfo.lineNumber + this.lineNumberStart - 1).toString();
     }
 
     /**
      * @type {string}
      */
-    let diffType = diffInfo.type || ""
+    let diffType = diffInfo.type || "";
 
     if (diffType === "added") {
-      diffType = "inserted"
+      diffType = "inserted";
     }
 
     if (diffType === "removed") {
-      diffType = "deleted"
+      diffType = "deleted";
     }
 
     return html`
-      <td part=${`gutter-cell gutter-cell--${diffType} ${diffType}`}><span part="line-number">${lineNumber}</span></td>
+      <td part=${`gutter-cell gutter-cell--${diffType} ${diffType}`}>
+        <span part="line-number">${lineNumber}</span>
+      </td>
       <td part=${`diff-marker diff-marker--${diffType} ${diffType}`}></td>
-      <td part=${`line line--${diffType} ${diffType}`}>${this.renderValue(diffInfo)}</td>
+      <td part=${`line line--${diffType} ${diffType}`}>
+        ${this.renderValue(diffInfo)}
+      </td>
     `;
   }
 
@@ -319,16 +340,21 @@ export default class BasicDiffViewElement extends BaseElement {
    * @param {import("../../utils/compute-line-info.js").DiffInformation} obj
    */
   renderValue(obj) {
-    let value = /** @type {string | import("lit").TemplateResult[]} */ (obj.value)
+    let value = /** @type {string | import("lit").TemplateResult[]} */ (
+      obj.value
+    );
 
     if (obj.data?.length) {
       value = obj.data.map((data) => {
         if (data.type === "removed" || data.type === "added") {
-          return html`<span part=${`character-diff character-diff--${DIFF_CONVERTER[data.type]}`}>${data.value}</span>`
+          return html`<span
+            part=${`character-diff character-diff--${DIFF_CONVERTER[data.type]}`}
+            >${data.value}</span
+          >`;
         } else {
-          return html`<span>${data.value}</span>`
+          return html`<span>${data.value}</span>`;
         }
-      })
+      });
     }
 
     return value;
@@ -360,7 +386,7 @@ export default class BasicDiffViewElement extends BaseElement {
 
     // The value for the current word within the line.
     // This should always be a string?
-    const value = /** @type {string} */ (diffInfoLine.value) || ""
+    const value = /** @type {string} */ (diffInfoLine.value) || "";
 
     return {
       length: /** @type {string} */ (diffInfoLine.value).length,
@@ -439,4 +465,3 @@ export default class BasicDiffViewElement extends BaseElement {
     return text;
   }
 }
-

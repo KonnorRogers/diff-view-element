@@ -4,7 +4,9 @@ import "diff-view-element";
 
 suite("<basic-diff-view-element>", () => {
   test("Should render a component", async () => {
-    const el = await fixture(html` <basic-diff-view-element></basic-diff-view-element> `);
+    const el = await fixture(html`
+      <basic-diff-view-element></basic-diff-view-element>
+    `);
 
     assert(
       el.matches(":defined"),
@@ -53,7 +55,9 @@ console.log(y)"
   });
 
   test("Should correctly identify diffs for an advanced comparison", async () => {
-    const el = await fixture(html` <basic-diff-view-element></basic-diff-view-element> `);
+    const el = await fixture(html`
+      <basic-diff-view-element></basic-diff-view-element>
+    `);
 
     const oldValue = await readFile({
       path: "fixtures/webpack-diff-old.js",
@@ -143,7 +147,9 @@ console.log(y)"
   });
 
   test("Should correctly identify diffs for an advanced comparison", async () => {
-    const el = await fixture(html` <basic-diff-view-element></basic-diff-view-element> `);
+    const el = await fixture(html`
+      <basic-diff-view-element></basic-diff-view-element>
+    `);
 
     const oldValue = await readFile({
       path: "fixtures/webpack-diff-old.js",

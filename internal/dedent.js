@@ -1,9 +1,9 @@
 /**
  * This may be wrong, but we assume a `\t` is equivalent to 2 spaces.
  */
-const TAB_LENGTH = 2
+const TAB_LENGTH = 2;
 
-const INDENT_REGEXP = new RegExp(`(\t| {${TAB_LENGTH}})`)
+const INDENT_REGEXP = new RegExp(`(\t| {${TAB_LENGTH}})`);
 
 /**
  * @param {TemplateStringsArray|string} templateStrings
@@ -17,20 +17,20 @@ export function dedent(templateStrings, ...values) {
       ? [templateStrings]
       : templateStrings.slice();
 
-  let string = ""
+  let string = "";
 
-  function interpolate () {
+  function interpolate() {
     string = strings[0];
 
     for (let i = 0; i < values.length; i++) {
       string += values[i] + strings[i + 1];
     }
 
-    string = string.trim()
+    string = string.trim();
   }
 
   // 1. check if its dedentable.
-  let isDedentable = true
+  let isDedentable = true;
 
   // 2. Find all line breaks to determine the highest common indentation level.
   for (let i = 0; i < strings.length; i++) {
@@ -38,18 +38,20 @@ export function dedent(templateStrings, ...values) {
 
     // If any new line starts without any indentation and not an empty string, mark it as not dedentable, and then break the loop.
     if (strings[i].trim() && strings[i].match(/\n[^\t ]/)) {
-      isDedentable = false
+      isDedentable = false;
       break;
     }
 
-    if ((match = strings[i].match(new RegExp(`\n${INDENT_REGEXP.source}+`, "g")))) {
+    if (
+      (match = strings[i].match(new RegExp(`\n${INDENT_REGEXP.source}+`, "g")))
+    ) {
       matches.push(...match);
     }
   }
 
   if (!isDedentable) {
-    interpolate()
-    return string
+    interpolate();
+    return string;
   }
 
   // 3. Remove the common indentation from all strings.
@@ -63,7 +65,7 @@ export function dedent(templateStrings, ...values) {
   }
 
   // 5. Perform interpolation.
-  interpolate()
+  interpolate();
 
   return string;
 }

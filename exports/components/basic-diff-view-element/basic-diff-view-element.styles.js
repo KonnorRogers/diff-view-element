@@ -1,4 +1,4 @@
-import { css } from "lit"
+import { css } from "lit";
 
 export const componentStyles = css`
   :host {
@@ -141,16 +141,18 @@ export const componentStyles = css`
   /** I'm not quite sure why its "n+4" instead of "n+3", when <td> 1-3 is the left, and <td> 4-6 is the right */
 
   /** Left half */
-  table:not([active-side="right"]):has(tr td:nth-child(-n + 4):hover) tr td:nth-child(3) {
+  table:not([active-side="right"]):has(tr td:nth-child(-n + 4):hover)
+    tr
+    td:nth-child(3) {
     -webkit-user-select: auto;
     user-select: auto;
   }
 
   /** Right half */
-  table:not([active-side="left"]):has(tr td:nth-child(n + 3):hover) tr td:nth-child(6) {
+  table:not([active-side="left"]):has(tr td:nth-child(n + 3):hover)
+    tr
+    td:nth-child(6) {
     -webkit-user-select: auto;
     user-select: auto;
   }
-`
-
-
+`;

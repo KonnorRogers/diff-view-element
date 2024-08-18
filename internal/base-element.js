@@ -1,6 +1,6 @@
 import { LitElement } from "lit";
 import { DefineableMixin } from "web-component-define";
-import { version } from "./version.js"
+import { version } from "./version.js";
 
 /**
  * @customElement
@@ -11,7 +11,7 @@ export class BaseElement extends DefineableMixin(LitElement) {
    */
   static dependencies = {};
 
-  static version = version
+  static version = version;
 
   // /**
   //  * @param {string} [name=this.baseName] - Tag name
@@ -39,8 +39,7 @@ export class BaseElement extends DefineableMixin(LitElement) {
    * Gets directionality of the element
    * @returns {"ltr" | "rtl"}
    */
-  getTextDirection () {
-    return this.matches(":dir(rtl)") ? "rtl" : "ltr"
+  getTextDirection() {
+    return this.matches(":dir(rtl)") ? "rtl" : "ltr";
   }
 }
-
