@@ -136,31 +136,38 @@ export default class BasicDiffViewElement extends BaseElement {
      * @type {"all" | "last" | "none"}
      */
     this.unescapeBehavior = "all";
-
-    this.newLineRegex = /\r\n|\r|\n/;
   }
 
+  /**
+   * Remove the "active-side" from the table element
+   * @param {PointerEvent} e
+   */
   handleTablePointerUp (e) {
     const table = this.shadowRoot?.querySelector("table")
 
     if (!table) { return }
 
     table.removeAttribute("active-side")
-
-    try {
-      table.releasePointerCapture(e.pointerId)
-    } catch (_e) {
-      // We dont care if this fails.
-    }
   }
 
+
+  /**
+   * Handles "pointerdown" events on the table. This is used for determined what side is "active" so that you could only ever "select" one side of the diff.
+   * @param {PointerEvent} e
+   */
   handleTablePointerDown (e) {
-    const composedPath = e.composedPath()
-    const td = composedPath.find((el) => el.tagName?.toLowerCase() === "td")
-    const tr = composedPath.find((el) => el.tagName?.toLowerCase() === "tr")
     const table = this.shadowRoot?.querySelector("table")
 
     if (!table) { return }
+
+    const composedPath = e.composedPath()
+
+    // <td>
+    const td = /** @type {Element | null} */ (composedPath.find((el) => /** @type {Element} */ (el).tagName?.toLowerCase() === "td"))
+
+    // <tr>
+    const tr = /** @type {Element | null} */ (composedPath.find((el) => /** @type {Element} */ (el).tagName?.toLowerCase() === "tr"))
+
     if (!tr) {
       table.removeAttribute("active-side")
       return
@@ -170,7 +177,6 @@ export default class BasicDiffViewElement extends BaseElement {
       return
     }
 
-    table.setPointerCapture(e.pointerId)
     const index = [...tr.querySelectorAll("td")].findIndex((el) => el === td)
 
     if (index < 0 ) {
@@ -188,7 +194,7 @@ export default class BasicDiffViewElement extends BaseElement {
 
   /**
    * @override
-   *  @param {import("lit").PropertyValues<typeof BasicDiffViewElement["properties"]>} changedProperties
+   * @param {import("lit").PropertyValues<typeof BasicDiffViewElement["properties"]>} changedProperties
    */
   willUpdate(changedProperties) {
     if (!this.preserveWhitespace) {
@@ -205,6 +211,7 @@ export default class BasicDiffViewElement extends BaseElement {
   }
 
   /**
+   * Turns slotted elements into strings to be consumed by oldValue / newValue.
    * @param {Event} e
    */
   handleSlottedValues (e) {
@@ -302,14 +309,15 @@ export default class BasicDiffViewElement extends BaseElement {
     return html`
       <td part=${`gutter-cell gutter-cell--${diffType} ${diffType}`}><span part="line-number">${lineNumber}</span></td>
       <td part=${`diff-marker diff-marker--${diffType} ${diffType}`}></td>
-      <td part=${`line line--${diffType} ${diffType}`}>${this.renderWord(diffInfo)}</td>
+      <td part=${`line line--${diffType} ${diffType}`}>${this.renderValue(diffInfo)}</td>
     `;
   }
 
   /**
+   * Renders a value given a DiffInformation object
    * @param {import("../../utils/compute-line-info.js").DiffInformation} obj
    */
-  renderWord(obj) {
+  renderValue(obj) {
     let value = /** @type {string | import("lit").TemplateResult[]} */ (obj.value)
 
     if (obj.data?.length) {
@@ -326,12 +334,13 @@ export default class BasicDiffViewElement extends BaseElement {
   }
 
   /**
+   * A helper for finding data for a particular diff. This is useful for passing data further down especially for character diffs.
    * @param {import("../../utils/compute-line-info.js").DiffInformation} diffInfo - diff info for right or light
    * @param {import("../../utils/compute-line-info.js").DiffInformation} diffInfoLine - diffInfo.value for right / left
    * @param {number} index
    * @returns {LineDiffData}
    */
-  toWordData(diffInfo, diffInfoLine, index) {
+  toCharacterData(diffInfo, diffInfoLine, index) {
     const offsetValue =
       /** @type {import("../../utils/compute-line-info.js").DiffInformation[]} */ (
         diffInfo.value
@@ -379,7 +388,7 @@ export default class BasicDiffViewElement extends BaseElement {
             if (rightInfo.data == null) {
               return;
             }
-            rightInfo.data.push(this.toWordData(rightInfo, obj, index));
+            rightInfo.data.push(this.toCharacterData(rightInfo, obj, index));
             return obj.value;
           })
           .join("");
@@ -398,7 +407,7 @@ export default class BasicDiffViewElement extends BaseElement {
             if (leftInfo.data == null) {
               return;
             }
-            leftInfo.data.push(this.toWordData(leftInfo, obj, index));
+            leftInfo.data.push(this.toCharacterData(leftInfo, obj, index));
             return obj.value;
           })
           .join("");

@@ -62,7 +62,6 @@ export default class DiffViewElement extends BasicDiffViewElement {
   static get properties () {
     return /** @type {const} */ ({
       ...super.properties,
-      language: {},
       highlighter: { attribute: false, state: true },
     });
   }
@@ -143,7 +142,8 @@ export default class DiffViewElement extends BasicDiffViewElement {
     });
   }
   /**
-    * a "wrap" plugin for Prism to add parts to ever token.
+    * a "wrap" plugin for Prism to add parts to every token. Useful for external styling.
+    * IE: `<span class="token tag">` becomes `<span class="token tag" part="token tag">`
     * @param {any} env
     */
   diffPartPlugin (env) {
@@ -174,6 +174,7 @@ export default class DiffViewElement extends BasicDiffViewElement {
   }
 
   /**
+   * The meat and potatos of the PrismJS highlighter. It runs the tokenizer and adds the per-character diffs as well as applicable highlights.
    * @param {import("../../utils/compute-line-info.js").LineInformation[]} lineInfo
    */
   syntaxHighlight(lineInfo) {
