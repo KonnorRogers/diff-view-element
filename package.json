@@ -19,6 +19,8 @@
   },
   "type": "module",
   "files": [
+    "bundles",
+    "cdn",
     "exports",
     "internal",
     "types",
