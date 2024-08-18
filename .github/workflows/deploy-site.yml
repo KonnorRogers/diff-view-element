@@ -17,6 +17,25 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+
+
+    permissions:
+      actions: write
+      attestations: none
+      checks: read
+      contents: write
+      deployments: write
+      id-token: write
+      issues: write
+      discussions: none
+      packages: none
+      pages: none
+      pull-requests: read
+      repository-projects: none
+      security-events: none
+      statuses: read
+
     strategy:
       matrix:
         node-version: [18]
