@@ -16,9 +16,9 @@ title: <diff-view-element>
       language="javascript"
       old-value="const x = 'Hello World'"
       new-value="
-const y = 'Hello Moto'
-console.log(y)
-"
+        const y = 'Hello Moto'
+        console.log(y)
+      "
     >
 
     </diff-view-element>
@@ -40,9 +40,11 @@ console.log(y)
       ;(async () => {
         const viewer = document.querySelector("diff-view-element")
         const newValue = await (await fetch("https://raw.githubusercontent.com/praneshr/react-diff-viewer/master/examples/src/diff/javascript/new.rjs")).text()
-        viewer.newValue = newValue
 
         const oldValue = await (await fetch("https://raw.githubusercontent.com/praneshr/react-diff-viewer/master/examples/src/diff/javascript/old.rjs")).text()
+
+        /** Do these at the same time to prevent flashing. */
+        viewer.newValue = newValue
         viewer.oldValue = oldValue
       })()
     &lt;/script>
@@ -57,14 +59,15 @@ Line numbers can be disabled by adding the `disable-line-numbers` attribute.
   preview-mode="shadow-dom"
   script-scope="shadow-dom"
 >
-
   <script slot="code" type="text/plain">
     <diff-view-element
       language="javascript"
       disable-line-numbers=""
       old-value="const x = 'Hello World'"
-      new-value="const y = 'Hello Moto'
-console.log(y)"
+      new-value="
+        const y = 'Hello Moto'
+        console.log(y)
+      "
     ></diff-view-element>
   </script>
 </light-preview>
@@ -83,8 +86,10 @@ The starting line number can be changed by using the `line-number-start` attribu
       language="javascript"
       line-number-start="35"
       old-value="const x = 'Hello World'"
-      new-value="const y = 'Hello Moto'
-console.log(y)"
+      new-value="
+        const y = 'Hello Moto'
+        console.log(y)
+      "
     ></diff-view-element>
   </script>
 </light-preview>
@@ -149,7 +154,12 @@ Whitespace can be preserved by using `preserve-whitespace` which will also prese
 - [ ] - "Unified view" where diffs are rendered inline instead of 2 different views
 - [ ] - Render functions for additional things like buttons
 - [ ] - Code folding
+- [ ] - File names
+- [ ] - Displaying number of diffs in a file
+- [ ] - Expose more types of diffs (words / sentences / json / css, etc)
 
 Got an idea? I'd love to hear it!
 
 <https://github.com/KonnorRogers/diff-view-element/issues>
+
+

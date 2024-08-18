@@ -34,10 +34,10 @@ console.log(y)"
       .querySelectorAll("[part~='character-diff']");
     const addedDiffs = el.shadowRoot
       .querySelector("table")
-      .querySelectorAll("[part~='character-diff--added']");
+      .querySelectorAll("[part~='character-diff--inserted']");
     const removedDiffs = el.shadowRoot
       .querySelector("table")
-      .querySelectorAll("[part~='character-diff--removed']");
+      .querySelectorAll("[part~='character-diff--deleted']");
 
     assert.equal(diffs.length, 6);
     assert.equal(addedDiffs.length, 3);
@@ -81,10 +81,10 @@ console.log(y)"
       .querySelectorAll("[part~='character-diff']");
     const addedDiffs = el.shadowRoot
       .querySelector("table")
-      .querySelectorAll("[part~='character-diff--added']");
+      .querySelectorAll("[part~='character-diff--inserted']");
     const removedDiffs = el.shadowRoot
       .querySelector("table")
-      .querySelectorAll("[part~='character-diff--removed']");
+      .querySelectorAll("[part~='character-diff--deleted']");
 
     assert.equal(diffs.length, 4);
     assert.equal(addedDiffs.length, 1);
@@ -124,10 +124,10 @@ console.log(y)"
       .querySelectorAll("[part~='character-diff']");
     const addedDiffs = el.shadowRoot
       .querySelector("table")
-      .querySelectorAll("[part~='character-diff--added']");
+      .querySelectorAll("[part~='character-diff--inserted']");
     const removedDiffs = el.shadowRoot
       .querySelector("table")
-      .querySelectorAll("[part~='character-diff--removed']");
+      .querySelectorAll("[part~='character-diff--deleted']");
 
     assert.equal(diffs.length, 6);
     assert.equal(addedDiffs.length, 3);
@@ -171,10 +171,10 @@ console.log(y)"
       .querySelectorAll("[part~='character-diff']");
     const addedDiffs = el.shadowRoot
       .querySelector("table")
-      .querySelectorAll("[part~='character-diff--added']");
+      .querySelectorAll("[part~='character-diff--inserted']");
     const removedDiffs = el.shadowRoot
       .querySelector("table")
-      .querySelectorAll("[part~='character-diff--removed']");
+      .querySelectorAll("[part~='character-diff--deleted']");
 
     assert.equal(diffs.length, 4);
     assert.equal(addedDiffs.length, 1);

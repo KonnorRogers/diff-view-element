@@ -6,8 +6,6 @@ import { baseStyles } from "../../styles/base-styles.js";
 import { componentStyles } from "./diff-view-element.styles.js";
 import { theme } from "../../styles/default-theme.styles.js";
 
-import { computeLineInformation } from "../../utils/compute-line-info.js";
-
 import {
   createPrismInstance,
   PrismEnv,
@@ -15,6 +13,10 @@ import {
 import { LineNumberPlugin } from "../../../internal/line-number-plugin.js";
 import { LineHighlightWrapPlugin } from "../../../internal/line-highlight-plugin.js";
 import BasicDiffViewElement from "../basic-diff-view-element/basic-diff-view-element-register.js";
+
+/**
+ * @typedef {import("../basic-diff-view-element/basic-diff-view-element.js").LineDiffData} LineDiffData
+ */
 
 class CustomToken extends Token {
   /**
@@ -30,20 +32,16 @@ class CustomToken extends Token {
   }
 }
 
-/**
- * @typedef {object} LineDiffData
- * @property {number} length - length of the diff.
- * @property {import("../../utils/compute-line-info.js").DiffTypeValues} type - The type of diff
- * @property {number} offset - The offset along the X axis where the diff starts.
- * @property {string} offsetValue - The characters prior to the current char diff
- * @property {string} value - The current value from diffInfo for the line. Mainly used for debugging.
- */
+const DIFF_CONVERTER = /** @const */ ({
+  added: "inserted",
+  removed: "deleted",
+})
 
 /**
+ * A diff viewer complete with PrismJS for syntax highlighting.
  * @customElement
  * @tagname diff-view-element
- * @summary Short summary of the component's intended use.
- * @documentation https://konnorrogers.github.io/diff-view-kit/components/diff-view-element
+ * @documentation https://konnorrogers.github.io/diff-view-elements/components/diff-view-element
  * @status experimental
  * @since 1.0
  */
@@ -61,46 +59,16 @@ export default class DiffViewElement extends BasicDiffViewElement {
   /**
    * @override
    */
-  static properties = /** @type {const} */ ({
-    view: {},
-    newValue: {attribute: "new-value"},
-    oldValue: {attribute: "old-value"},
-
-    disableHighlight: { type: Boolean, attribute: "disable-highlight" },
-    preserveWhitespace: { type: Boolean, attribute: "preserve-whitespace" },
-    disableLineNumbers: {
-      type: Boolean,
-      reflect: true,
-      attribute: "disable-line-numbers",
-    },
-    lineNumberStart: { type: Number, attribute: "line-number-start" },
-    wrap: { reflect: true, attribute: "wrap" },
-    language: {},
-    highlighter: { attribute: false, state: true },
-  });
+  static get properties () {
+    return /** @type {const} */ ({
+      ...super.properties,
+      language: {},
+      highlighter: { attribute: false, state: true },
+    });
+  }
 
   constructor() {
     super();
-
-    /**
-     * The value to be displayed on the right in a split view
-     * @type {string}
-     */
-    this.newValue = "";
-
-    /**
-     * The value to be displayed on the right in a split view
-     * @type {string}
-     */
-    this.oldValue = "";
-
-    /**
-     * Side by side comparison of the diff
-     * @type {"split"}
-     */
-    this.view = "split";
-
-    // Light Code properties to forward
 
     /**
      * The language to highlight for.
@@ -112,82 +80,20 @@ export default class DiffViewElement extends BasicDiffViewElement {
     this.language = "plaintext";
 
     /**
-     * @type {Boolean}
-     * Whether or not to preserve white spaces from templates and attempt to dedent and chomp new lines.
-     */
-    this.preserveWhitespace = false;
-
-    /**
-     * If disabled, its on you to provide `<pre><code></code></pre>`
-     * @type {boolean}
-     */
-    this.disableHighlight = false;
-
-    /**
-     * @type {boolean} whether or not to disable line numbers
-     */
-    this.disableLineNumbers = false;
-
-    /**
-     * Where to start counting indexes in the gutter. Note, this is purely for display purposes.
-     * @type {number}
-     */
-    this.lineNumberStart = 1;
-
-    /**
-     * We will take the code, wrap it in `<pre><code></code></pre>` and run it through
-     * Prism.js.
-     * If the element has `disableHighlight`, we will not touch their code. Instead they must pass in escapedHTML.
-     * @type {string}
-     */
-    this.code = "";
-
-    /**
      * Points to an instance of Prism from "prism-esm" for adjusting highlighting, adding plugins, etc.
      * @type {ReturnType<typeof createPrismInstance>}
      */
     this.highlighter = createPrismInstance();
-
-    /**
-     * @property
-     * @type {"soft" | "hard"}
-     * If `wrap="soft"`, lines will wrap when they reach the edge of their container. If `wrap="none"`, lines will not wrap instead all the user to scroll horizontally to see more code.
-     */
-    this.wrap = "hard";
-
-    /**
-     * Whether or not to transform `&lt;/script>` into `<script>`
-     * If true, will run transform. If false, will leave the code as is.
-     *
-     * @type {"all" | "last" | "none"}
-     */
-    this.unescapeBehavior = "all";
-
-    this.newLineRegex = /\r\n|\r|\n/;
   }
 
   /**
+   * Transform line info via side effects.
    * @override
-   * @param {ReturnType<typeof computeLineInformation>} data
+   * @type {BasicDiffViewElement["transformLineInformation"]}
    */
-  renderDiff(data) {
-    /**
-     * @type {import("lit").TemplateResult[]}
-     */
-    const finalHTML = [];
-
-    this.transformLineInformation(data.lineInformation);
-    this.syntaxHighlight(data.lineInformation);
-
-    data.lineInformation.forEach((lineInfo, index) => {
-      finalHTML.push(html`
-        <tr>
-          ${this.renderLine(lineInfo.left)} ${this.renderLine(lineInfo.right)}
-        </tr>
-      `);
-    });
-
-    return finalHTML;
+  transformLineInformation (lineInfo) {
+    super.transformLineInformation(lineInfo)
+    this.syntaxHighlight(lineInfo)
   }
 
   /**
@@ -253,14 +159,17 @@ export default class DiffViewElement extends BasicDiffViewElement {
 
     if (env.type.startsWith("character-diff")) {
       const [base, diffType] = env.type.split(/--/);
-      // part="character-diff character-diff--{removed|added}"
-      env.attributes["part"] = `${base} ${base}--${diffType}`;
+
+      const type = DIFF_CONVERTER[/** @type {keyof typeof DIFF_CONVERTER} */ (diffType)] || ""
+
+      // part="character-diff character-diff--{inserted|deleted}"
+      env.attributes["part"] = `${base} ${base}--${type}`;
     }
 
     // We dont need to add parts for our own custom tokens.
     if (env.type.startsWith("character-diff") || isTableCell) { return }
 
-    // These are all tokens from Prism. Map their class name to a part for easy themeing.
+    // These are all tokens from Prism. Map their class name to a part for easy theming.
     env.attributes["part"] = `token ${env.type}`;
   }
 

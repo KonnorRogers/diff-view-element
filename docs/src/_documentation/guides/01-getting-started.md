@@ -13,7 +13,7 @@ npm install diff-view-element
 
 ```js
 // entrypoint.js
-import "diff-view-element"; // Will register `<diff-viewer>` for you
+import "diff-view-element"; // Will register `<basic-diff-view-element>` and `<diff-view-element>` for you
 ```
 
 ## CDN usage
@@ -29,6 +29,10 @@ import "diff-view-element"; // Will register `<diff-viewer>` for you
   import "https://cdn.jsdelivr.net/npm/diff-view-element@1.0.0";
 </script>
 ```
+
+## A basic example
+
+With the imports in place, you can now use the custom element and get to diffing!
 
 ```html
 <diff-view-element old-value="abcd" new-value="abce"></diff-view-element>
@@ -47,3 +51,9 @@ import "diff-view-element"; // Will register `<diff-viewer>` for you
 </light-preview>
 
 <!-- <%%= component_list %> -->
+
+## Cherry picking
+
+For the bundle size conscious, or those looking to extend, `diff-view-element` has exports available for element definitions that both do not register, and will auto register.
+
+For more, check out the "Imports" section of [&lt;diff-view-element&gt;](/components/diff-view-element/#imports) and [&lt;basic-diff-view-element&gt;](/components/basic-diff-view-element#imports)

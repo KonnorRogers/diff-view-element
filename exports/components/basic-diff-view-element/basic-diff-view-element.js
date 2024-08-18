@@ -11,6 +11,11 @@ import { elementsToString } from "../../../internal/elements-to-strings.js";
 import { dedent } from "../../../internal/dedent.js";
 import { basicTheme } from "../../styles/basic-theme.styles.js";
 
+const DIFF_CONVERTER = /** @const */ ({
+  added: "inserted",
+  removed: "deleted",
+})
+
 /**
  * @typedef {object} LineDiffData
  * @property {number} length - length of the diff.
@@ -47,21 +52,22 @@ export default class BasicDiffViewElement extends BaseElement {
   /**
    * @override
    */
-  static properties = /** @type {const} */ ({
-    view: {},
-    newValue: {attribute: "new-value"},
-    oldValue: {attribute: "old-value"},
+  static get properties () {
+    return /** @type {const} */ ({
+      view: {},
+      newValue: {attribute: "new-value"},
+      oldValue: {attribute: "old-value"},
 
-    preserveWhitespace: { type: Boolean, attribute: "preserve-whitespace" },
-    disableLineNumbers: {
-      type: Boolean,
-      reflect: true,
-      attribute: "disable-line-numbers",
-    },
-    lineNumberStart: { type: Number, attribute: "line-number-start" },
-    wrap: { reflect: true, attribute: "wrap" },
-    language: {},
-  });
+      preserveWhitespace: { type: Boolean, attribute: "preserve-whitespace" },
+      disableLineNumbers: {
+        type: Boolean,
+        reflect: true,
+        attribute: "disable-line-numbers",
+      },
+      lineNumberStart: { type: Number, attribute: "line-number-start" },
+      wrap: { reflect: true, attribute: "wrap" },
+    })
+  }
 
   constructor() {
     super();
@@ -73,21 +79,19 @@ export default class BasicDiffViewElement extends BaseElement {
     this.newValue = "";
 
     /**
-     * The value to be displayed on the right in a split view
+     * The value to be displayed on the left in a split view
      * @type {string}
      */
     this.oldValue = "";
 
     /**
-     * Side by side comparison of the diff
+     * Side by side comparison of the diff. Currently the only view supported is "split" view (side by side).
      * @type {"split"}
      */
     this.view = "split";
 
-    // Light Code properties to forward
-
     /**
-     * The language to highlight for.
+     * The language to highlight for. This won't do much for `<basic-diff-view-element>`, but makes rendering consistent.
      * Supported languages out of the box are "plaintext", "html", "javascript", "markdown", "css", "js", "ts"
      * For more on how to add additional languages, check out the docs.
      *   [Adding languages for highlighting](/guides/adding-languages-for-highlighting)
@@ -136,18 +140,64 @@ export default class BasicDiffViewElement extends BaseElement {
     this.newLineRegex = /\r\n|\r|\n/;
   }
 
+  handleTablePointerUp (e) {
+    const table = this.shadowRoot?.querySelector("table")
+
+    if (!table) { return }
+
+    table.removeAttribute("active-side")
+
+    try {
+      table.releasePointerCapture(e.pointerId)
+    } catch (_e) {
+      // We dont care if this fails.
+    }
+  }
+
+  handleTablePointerDown (e) {
+    const composedPath = e.composedPath()
+    const td = composedPath.find((el) => el.tagName?.toLowerCase() === "td")
+    const tr = composedPath.find((el) => el.tagName?.toLowerCase() === "tr")
+    const table = this.shadowRoot?.querySelector("table")
+
+    if (!table) { return }
+    if (!tr) {
+      table.removeAttribute("active-side")
+      return
+    }
+    if (!td) {
+      table.removeAttribute("active-side")
+      return
+    }
+
+    table.setPointerCapture(e.pointerId)
+    const index = [...tr.querySelectorAll("td")].findIndex((el) => el === td)
+
+    if (index < 0 ) {
+      table.removeAttribute("active-side")
+      return
+    }
+
+    if (index < 3) {
+      table.setAttribute("active-side", "left")
+      return
+    }
+
+    table.setAttribute("active-side", "right")
+  }
+
   /**
-    * @override
-   * @param {import("lit").PropertyValues<typeof BasicDiffViewElement["properties"]>} changedProperties
+   * @override
+   *  @param {import("lit").PropertyValues<typeof BasicDiffViewElement["properties"]>} changedProperties
    */
   willUpdate(changedProperties) {
     if (!this.preserveWhitespace) {
       if (this.oldValue && changedProperties.has("oldValue")) {
-        this.oldValue = dedent(this.oldValue).trim();
+        this.oldValue = dedent(this.oldValue.trim());
       }
 
       if (this.newValue && changedProperties.has("newValue")) {
-        this.newValue = dedent(this.newValue).trim();
+        this.newValue = dedent(this.newValue.trim());
       }
     }
 
@@ -184,10 +234,15 @@ export default class BasicDiffViewElement extends BaseElement {
         <pre
           part="pre pre-${this.language}"
           class="diff-highlight language-${this.language}"
+          tabindex="0"
         ><code
             part="code code-${this.language}"
             class="language-${this.language}"
-	    style="white-space: inherit;"><table part="table"><tbody part="table-body">${
+	><table
+              part="table"
+              @pointerdown=${this.handleTablePointerDown}
+              @pointerup=${this.handleTablePointerUp}
+            ><tbody part="table-body">${
 	      this.renderDiff(computedLines)
 	    }</tbody></table></code></pre>
       </div>
@@ -198,6 +253,7 @@ export default class BasicDiffViewElement extends BaseElement {
   }
 
   /**
+   * The base entrypoint for rendering diffs. The return value of this will be inside of a `<tbody>`
    * @param {ReturnType<typeof computeLineInformation>} data
    */
   renderDiff(data) {
@@ -220,6 +276,7 @@ export default class BasicDiffViewElement extends BaseElement {
   }
 
   /**
+   * Renders a line on 1 side of the diff in split view.
    * @param {import("../../utils/compute-line-info.js").DiffInformation} diffInfo
    */
   renderLine(diffInfo) {
@@ -229,27 +286,23 @@ export default class BasicDiffViewElement extends BaseElement {
       lineNumber = (diffInfo.lineNumber + this.lineNumberStart - 1).toString()
     }
 
-    let markerType = ""
-    let gutterType = ""
+    /**
+     * @type {string}
+     */
+    let diffType = diffInfo.type || ""
 
-    let diffType = ""
-
-    if (diffInfo.type === "added") {
+    if (diffType === "added") {
       diffType = "inserted"
-      markerType = `diff-marker-${diffType}`
-      gutterType = `gutter-cell-${diffType}`
     }
 
-    if (diffInfo.type === "removed") {
+    if (diffType === "removed") {
       diffType = "deleted"
-      markerType = `diff-marker-${diffType}`
-      gutterType = `gutter-cell-${diffType}`
     }
 
     return html`
-      <td part=${`gutter-cell ${gutterType} ${diffType}`}><span part="line-number">${lineNumber}</span></td>
-      <td part=${`diff-marker ${markerType} ${diffType}`}></td>
-      <td part=${`line line-${diffType} ${diffType}`}>${this.renderWord(diffInfo)}</td>
+      <td part=${`gutter-cell gutter-cell--${diffType} ${diffType}`}><span part="line-number">${lineNumber}</span></td>
+      <td part=${`diff-marker diff-marker--${diffType} ${diffType}`}></td>
+      <td part=${`line line--${diffType} ${diffType}`}>${this.renderWord(diffInfo)}</td>
     `;
   }
 
@@ -262,7 +315,7 @@ export default class BasicDiffViewElement extends BaseElement {
     if (obj.data?.length) {
       value = obj.data.map((data) => {
         if (data.type === "removed" || data.type === "added") {
-          return html`<span part=${`character-diff character-diff--${data.type}`}>${data.value}</span>`
+          return html`<span part=${`character-diff character-diff--${DIFF_CONVERTER[data.type]}`}>${data.value}</span>`
         } else {
           return html`<span>${data.value}</span>`
         }
@@ -310,6 +363,7 @@ export default class BasicDiffViewElement extends BaseElement {
   }
 
   /**
+   * In charge of altering the diffs per-line information. This will get called just before rendering all of the `<tr>`s inside of `renderDiff`.
    * @param {import("../../utils/compute-line-info.js").LineInformation[]} lineInformation
    */
   transformLineInformation(lineInformation) {

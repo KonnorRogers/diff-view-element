@@ -6,6 +6,7 @@ class Builders::Inspectors < SiteBuilder
       mark_external(document)
       syntax_highlight(document)
       add_preview_buttons(document)
+      apply_base_path_to_anchors(document)
     end
   end
 
@@ -100,7 +101,7 @@ class Builders::Inspectors < SiteBuilder
     preview.each do |el|
       id = "checkbox-" + SecureRandom.uuid.slice(0, 16).to_s
       html = <<~HTML
-        <div slot="before-expanded-code" style="display: grid; grid-auto-flow: column;">
+        <div slot="above-expanded-code">
           <codepen-button></codepen-button>
           <stackblitz-button></stackblitz-button>
           <form-control>
@@ -111,6 +112,15 @@ class Builders::Inspectors < SiteBuilder
       HTML
 
       el << html
+    end
+  end
+
+  def apply_base_path_to_anchors(document)
+    document.css("a[href^='/']").each do |anchor|
+      href = anchor[:href]
+      next if href.starts_with?(site.base_path)
+
+      anchor[:href] = site.base_path.gsub(/\/$/, "") + href
     end
   end
 end

@@ -32,3 +32,13 @@ light-preview form-control input[type="checkbox"] {
   width: 1em;
   accent-color: var(--sl-color-primary-600);
 }
+
+light-preview [slot="above-expanded-code"] {
+  display: grid;
+}
+
+@media screen and (min-width: 460px) {
+  light-preview [slot="above-expanded-code"] {
+    grid-auto-flow: column;
+  }
+}

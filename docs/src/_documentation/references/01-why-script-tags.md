@@ -1,9 +1,9 @@
 ---
 title: Why script tags
-description: Why light components use `<script>` tags instead of `<template>` tags
+description: Why slotted content uses use `<script>` tags instead of `<template>` tags
 ---
 
-You'll notice in examples for `<light-*>` elements that slotted elements it uses `<script type="text/plain">` tags and not `<template>` tags.
+You'll notice in examples for `<diff-view-element>`, elements that are slotted use `<script type="text/plain">` tags and not `<template>` tags.
 
 The `<template>` tag is not suitable for syntax highlighting because it applies formatting and is subject to the HTML parser. It is meant purely for HTML intended to be rendered. As a result, it will do things like strip / format text. As a result, `<script type="text/plain">` is the best way to get a "plaintext" representation of your code to be highlighted.
 
@@ -25,7 +25,7 @@ Like so:
 </light-preview>
 ```
 
-To workaround this, `<light-*>` components have a convention of automatically **unescaping** tags that look like this:
+To workaround this, `<diff-view-element>` components have a convention of automatically **unescaping** tags that look like this:
 
 `&lt;/script>` and turns them into proper closing tags. `</script>`
 

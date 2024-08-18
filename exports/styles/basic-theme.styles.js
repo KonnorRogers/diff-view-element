@@ -20,11 +20,13 @@ export const basicTheme = css`
 
     --syntax-deleted-bg: hsla(353, 95%, 92%, 0.5);
     --syntax-deleted-selected-bg: hsla(353, 95%, 66%, 0.25);
-    --syntax-deleted-text-color: hsl(5, 79%, 42%);
 
     --syntax-inserted-bg: hsla(137, 100%, 95%, 0.5);
     --syntax-inserted-selected-bg: hsla(135, 73%, 55%, 0.25);
+
+    /** Added only for basic-diff-view-element */
     --syntax-inserted-text-color: hsl(119, 34%, 37%);
+    --syntax-deleted-text-color: hsl(5, 79%, 42%);
   }
 
   code[class*="language-"],
