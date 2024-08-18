@@ -2,7 +2,7 @@
     <meta name="version-number" content="1.0.0">
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title></title>
+<title>Getting Started</title>
 
 <!-- <base href="/diff-view-element/"> -->
 
@@ -83,7 +83,7 @@
 
 
   </head>
-  <body class="home " data-controller="search">
+  <body class="doc " data-controller="search">
     <kr-layout main-id="main">
       <header class="nav-header" slot="header">
   <nav class="top-nav" aria-labelledby="top-nav-label">
@@ -176,9 +176,10 @@
 </header>
 
 
-      <main id="main" style="margin: 0 auto; --main-width: 100ch;">
-  <div class="hero--mobile">
-    <a class="nav-link logo__link" href="/diff-view-element">
+      <sl-drawer id="side-nav-drawer" hidden="" no-header="" placement="start" class="drawer-placement-start side-nav__drawer" style="--size: clamp(400px, 75%, 1536px);" data-controller="side-nav" slot="dialog">
+  <div class="side-nav__drawer__header">
+    <div style="display: flex; align-items: center;">
+      <a class="nav-link logo__link" href="/diff-view-element">
   <!--?xml version="1.0" encoding="UTF-8" standalone="no"?-->
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
@@ -189,78 +190,277 @@
   </span>
 </a>
 
+        <div style="font-size: var(--sl-font-large); margin-left: 0.5rem;">
+    v1.0.0
   </div>
 
-  <h1 class="slogan">
-    Diff with ease
+    </div>
+    <sl-icon-button name="x-lg" label="Close" data-action="click->side-nav#close"></sl-icon-button>
+  </div>
+
+  <nav id="side-nav--mobile" slot="" aria-label="Side Nav" tabindex="-1" class="side-nav side-nav--mobile" data-preserve-scroll="">
+  <ul class="side-nav__menu">
+      <ul class="side-nav__category-menu">
+        <li class="side-nav__category-header"><a class="side-nav__category-link" href="/diff-view-element/guides">Guides</a></li>
+          <li class="side-nav__item is-active">
+    <a class="side-nav__link" href="/diff-view-element/guides/getting-started/">Getting Started</a>
+  </li>
+  <li class="side-nav__item ">
+    <a class="side-nav__link" href="/diff-view-element/guides/adding-languages-for-highlighting/">Adding languages for highlighting</a>
+  </li>
+
+      </ul>
+      <ul class="side-nav__category-menu">
+        <li class="side-nav__category-header"><a class="side-nav__category-link" href="/diff-view-element/components">Components</a></li>
+          <li class="side-nav__item ">
+    <a class="side-nav__link" href="/diff-view-element/components/basic-diff-view-element/">&lt;basic-diff-view-element&gt;</a>
+  </li>
+  <li class="side-nav__item ">
+    <a class="side-nav__link" href="/diff-view-element/components/diff-view-element/">&lt;diff-view-element&gt;</a>
+  </li>
+
+      </ul>
+      <ul class="side-nav__category-menu">
+        <li class="side-nav__category-header"><a class="side-nav__category-link" href="/diff-view-element/references">References</a></li>
+          <li class="side-nav__item ">
+    <a class="side-nav__link" href="/diff-view-element/references/changelog/">Changelog</a>
+  </li>
+  <li class="side-nav__item ">
+    <a class="side-nav__link" href="/diff-view-element/references/why-script-tags/">Why script tags</a>
+  </li>
+  <li class="side-nav__item ">
+    <a class="side-nav__link" href="/diff-view-element/references/theming/">Theming</a>
+  </li>
+
+      </ul>
+  </ul>
+</nav>
+
+  <sl-button slot="footer" type="primary" data-action="click->side-nav#close">Close</sl-button>
+</sl-drawer>
+
+<nav id="side-nav--desktop" slot="menu" aria-label="Side Nav" tabindex="-1" class="side-nav side-nav--desktop" data-preserve-scroll="">
+  <ul class="side-nav__menu">
+      <ul class="side-nav__category-menu">
+        <li class="side-nav__category-header"><a class="side-nav__category-link" href="/diff-view-element/guides">Guides</a></li>
+          <li class="side-nav__item is-active">
+    <a class="side-nav__link" href="/diff-view-element/guides/getting-started/">Getting Started</a>
+  </li>
+  <li class="side-nav__item ">
+    <a class="side-nav__link" href="/diff-view-element/guides/adding-languages-for-highlighting/">Adding languages for highlighting</a>
+  </li>
+
+      </ul>
+      <ul class="side-nav__category-menu">
+        <li class="side-nav__category-header"><a class="side-nav__category-link" href="/diff-view-element/components">Components</a></li>
+          <li class="side-nav__item ">
+    <a class="side-nav__link" href="/diff-view-element/components/basic-diff-view-element/">&lt;basic-diff-view-element&gt;</a>
+  </li>
+  <li class="side-nav__item ">
+    <a class="side-nav__link" href="/diff-view-element/components/diff-view-element/">&lt;diff-view-element&gt;</a>
+  </li>
+
+      </ul>
+      <ul class="side-nav__category-menu">
+        <li class="side-nav__category-header"><a class="side-nav__category-link" href="/diff-view-element/references">References</a></li>
+          <li class="side-nav__item ">
+    <a class="side-nav__link" href="/diff-view-element/references/changelog/">Changelog</a>
+  </li>
+  <li class="side-nav__item ">
+    <a class="side-nav__link" href="/diff-view-element/references/why-script-tags/">Why script tags</a>
+  </li>
+  <li class="side-nav__item ">
+    <a class="side-nav__link" href="/diff-view-element/references/theming/">Theming</a>
+  </li>
+
+      </ul>
+  </ul>
+</nav>
+
+
+
+<main id="main" class="documentation-content flow">
+  <h1 id="getting-started">
+    <a href="#getting-started">
+      Getting Started
+    </a>
   </h1>
 
-  <ul class="call-to-action__items" style="list-style: none;">
-      <li>
-        <sl-button variant="primary" href="/diff-view-element/guides/getting-started" class="call-to-action" pill="">
-          Getting Started
-        </sl-button>
-      </li>
-  </ul>
 
-<diff-view-element language="javascript"></diff-view-element>
+  <h2 id="npm-installation">
+          <a href="#npm-installation">NPM Installation</a>
+        </h2>
 
-<script type="module">
-  ;(async () => {
-    const viewer = document.querySelector("diff-view-element")
-    const newValue = await (await fetch("https://raw.githubusercontent.com/praneshr/react-diff-viewer/master/examples/src/diff/javascript/new.rjs")).text()
+<div class="syntax-block">        <div class="syntax-block__actions">
+          <div class="syntax-block__badge">
+            shell
+          </div>
 
-    const oldValue = await (await fetch("https://raw.githubusercontent.com/praneshr/react-diff-viewer/master/examples/src/diff/javascript/old.rjs")).text()
-    viewer.oldValue = oldValue
-    viewer.newValue = newValue
-  })()
+          <clipboard-copy for="a7eb5acc-dc79-427a-ad2a-fc9888f2bdc2" class="button clipboard clipboard--idle syntax-block__clipboard" aria-label="Copy to clipboard" data-controller="clipboard">
+            <sl-icon class="clipboard__icon--success" name="clipboard-check"></sl-icon>
+            <sl-icon class="clipboard__icon--idle" name="clipboard"></sl-icon>
+          </clipboard-copy>
+
+          <script type="text/plain" id="a7eb5acc-dc79-427a-ad2a-fc9888f2bdc2" hidden="">npm install diff-view-element
 </script>
+        </div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install </span>diff-view-element
+</code></pre></div></div></div>
+
+<h2 id="npm-usage">
+          <a href="#npm-usage">NPM Usage</a>
+        </h2>
+
+<div class="syntax-block">        <div class="syntax-block__actions">
+          <div class="syntax-block__badge">
+            JavaScript
+          </div>
+
+          <clipboard-copy for="5bd5844c-8dd3-4883-8be7-05c465b07520" class="button clipboard clipboard--idle syntax-block__clipboard" aria-label="Copy to clipboard" data-controller="clipboard">
+            <sl-icon class="clipboard__icon--success" name="clipboard-check"></sl-icon>
+            <sl-icon class="clipboard__icon--idle" name="clipboard"></sl-icon>
+          </clipboard-copy>
+
+          <script type="text/plain" id="5bd5844c-8dd3-4883-8be7-05c465b07520" hidden="">// entrypoint.js
+import &quot;diff-view-element&quot;; // Will register `&lt;basic-diff-view-element&gt;` and `&lt;diff-view-element&gt;` for you
+</script>
+        </div>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// entrypoint.js</span>
+<span class="k">import</span> <span class="dl">"</span><span class="s2">diff-view-element</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// Will register `&lt;basic-diff-view-element&gt;` and `&lt;diff-view-element&gt;` for you</span>
+</code></pre></div></div></div>
+
+<h2 id="cdn-usage">
+          <a href="#cdn-usage">CDN usage</a>
+        </h2>
+
+<div class="syntax-block">        <div class="syntax-block__actions">
+          <div class="syntax-block__badge">
+            HTML
+          </div>
+
+          <clipboard-copy for="8afcf573-d667-4522-b375-7b1e8873440d" class="button clipboard clipboard--idle syntax-block__clipboard" aria-label="Copy to clipboard" data-controller="clipboard">
+            <sl-icon class="clipboard__icon--success" name="clipboard-check"></sl-icon>
+            <sl-icon class="clipboard__icon--idle" name="clipboard"></sl-icon>
+          </clipboard-copy>
+
+          <script type="text/plain" id="8afcf573-d667-4522-b375-7b1e8873440d" hidden="">&lt;script type=&quot;module&quot;&gt;
+  import &quot;https://cdn.jsdelivr.net/npm/diff-view-element&quot;;
+
+  // Loading a version range. This will load the latest &gt;= 1.0.0 and &lt; 2.0.0 of diff-view-element.
+  import &quot;https://cdn.jsdelivr.net/npm/diff-view-element@^1.0.0&quot;;
+
+  // Loading a specific version. This will only load v1.0.0
+  import &quot;https://cdn.jsdelivr.net/npm/diff-view-element@1.0.0&quot;;
+&lt;/script&gt;
+</script>
+        </div>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"module"</span><span class="nt">&gt;</span>
+  <span class="k">import</span> <span class="dl">"</span><span class="s2">https://cdn.jsdelivr.net/npm/diff-view-element</span><span class="dl">"</span><span class="p">;</span>
+
+  <span class="c1">// Loading a version range. This will load the latest &gt;= 1.0.0 and </span><span class="o">&lt;</span> <span class="mf">2.0</span><span class="p">.</span><span class="mi">0</span> <span class="k">of</span> <span class="nx">diff</span><span class="o">-</span><span class="nx">view</span><span class="o">-</span><span class="nx">element</span><span class="p">.</span>
+  <span class="k">import</span> <span class="dl">"</span><span class="s2">https://cdn.jsdelivr.net/npm/diff-view-element@^1.0.0</span><span class="dl">"</span><span class="p">;</span>
+
+  <span class="c1">// Loading a specific version. This will only load v1.0.0</span>
+  <span class="k">import</span> <span class="dl">"</span><span class="s2">https://cdn.jsdelivr.net/npm/diff-view-element@1.0.0</span><span class="dl">"</span><span class="p">;</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div></div>
+
+<h2 id="a-basic-example">
+          <a href="#a-basic-example">A basic example</a>
+        </h2>
+
+<p>With the imports in place, you can now use the custom element and get to diffing!</p>
+
+<div class="syntax-block">        <div class="syntax-block__actions">
+          <div class="syntax-block__badge">
+            HTML
+          </div>
+
+          <clipboard-copy for="86555b83-219a-4436-8534-d2c1b710cae4" class="button clipboard clipboard--idle syntax-block__clipboard" aria-label="Copy to clipboard" data-controller="clipboard">
+            <sl-icon class="clipboard__icon--success" name="clipboard-check"></sl-icon>
+            <sl-icon class="clipboard__icon--idle" name="clipboard"></sl-icon>
+          </clipboard-copy>
+
+          <script type="text/plain" id="86555b83-219a-4436-8534-d2c1b710cae4" hidden="">&lt;diff-view-element old-value=&quot;abcd&quot; new-value=&quot;abce&quot;&gt;&lt;/diff-view-element&gt;
+</script>
+        </div>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;diff-view-element</span> <span class="na">old-value=</span><span class="s">"abcd"</span> <span class="na">new-value=</span><span class="s">"abce"</span><span class="nt">&gt;&lt;/diff-view-element&gt;</span>
+</code></pre></div></div></div>
+
+<light-preview preview-mode="shadow-dom" script-scope="shadow-dom">
+  <script slot="code" type="text/plain">
+    <diff-view-element
+      old-value="abcd"
+      new-value="abce"
+    ></diff-view-element>
+  </script>
+<div slot="above-expanded-code">
+  <codepen-button></codepen-button>
+  <stackblitz-button></stackblitz-button>
+  <form-control>
+    <input id="checkbox-bbf90d7b-5f2c-42" type="checkbox" data-controller="direction-switcher">
+    <label for="checkbox-bbf90d7b-5f2c-42" aria-label="Toggle right to left">RTL</label>
+  </form-control>
+</div>
+</light-preview>
+
+<!-- <%= component_list %> -->
+
+<h2 id="cherry-picking">
+          <a href="#cherry-picking">Cherry picking</a>
+        </h2>
+
+<p>For the bundle size conscious, or those looking to extend, <code class="highlighter-rouge">diff-view-element</code> has exports available for element definitions that both do not register, and will auto register.</p>
+
+<p>For more, check out the “Imports” section of <a href="/diff-view-element/components/diff-view-element/#imports">&lt;diff-view-element&gt;</a> and <a href="/diff-view-element/components/basic-diff-view-element#imports">&lt;basic-diff-view-element&gt;</a></p>
 
 
+    <div class="pagination-footer">
 
+      <div></div>
 
-  <h2 class="reason__header" style="margin-top: 2rem; text-align: center; font-size: 1.35em;">Why &lt;diff-view-element&gt;?</h2>
+      <sl-button class="next-page" href="/diff-view-element/guides/adding-languages-for-highlighting/">
+        <span style="text-align: start; display: block;">
+          <span style="display: block; color: var(--sl-color-neutral-500); font-size: 0.85rem;">Next Page</span>
+          <pagination-title>
+            Adding languages for highlighting
+          </pagination-title>
+        </span>
 
-  <section class="reason__grid">
-      <article>
-        <h3>Compatible.</h3>
-        <p style="margin: 0; padding: 0.25em var(--sl-spacing-x-small);">
-          Built on top of a fork of PrismJS, but any highlighter could be hooked up.
-        </p>
-      </article>
-      <article>
-        <h3>Extensible.</h3>
-        <p style="margin: 0; padding: 0.25em var(--sl-spacing-x-small);">
-          diff-view-element aims to be extensible to accomodate your diffing needs.
-        </p>
-      </article>
-      <article>
-        <h3>Themeable.</h3>
-        <p style="margin: 0; padding: 0.25em var(--sl-spacing-x-small);">
-          Themes can easily be pulled that are PrismJS compatible and tweaked to your needs!
-        </p>
-      </article>
-  </section>
+        <span slot="suffix">
+          <sl-icon name="arrow-right" style="font-size: 1.5rem; display: block;"></sl-icon>
+        </span>
 
-  <ul class="call-to-action__items" style="list-style: none;">
-      <li>
-        <sl-button variant="primary" href="/diff-view-element/guides/getting-started" class="call-to-action" pill="">
-          Getting Started
-        </sl-button>
-      </li>
-  </ul>
+      </sl-button>
+  </div>
 
-  
 
 </main>
 
+<nav slot="aside" class="table-of-contents" id="table-of-contents" aria-label="Table of contents" tabindex="-1" data-controller="scroll-spy">
+  <h2 class="table-of-contents__header">
+    Getting Started
+  </h2>
+  <ol class="table-of-contents__list">
+  <li class="side-nav__item" data-level="2">
+        <a href="#npm-installation" class="side-nav__link" style="">NPM Installation</a>
+      </li><li class="side-nav__item" data-level="2">
+        <a href="#npm-usage" class="side-nav__link" style="">NPM Usage</a>
+      </li><li class="side-nav__item" data-level="2">
+        <a href="#cdn-usage" class="side-nav__link" style="">CDN usage</a>
+      </li><li class="side-nav__item" data-level="2">
+        <a href="#a-basic-example" class="side-nav__link" style="">A basic example</a>
+      </li><li class="side-nav__item" data-level="2">
+        <a href="#cherry-picking" class="side-nav__link" style="">Cherry picking</a>
+      </li></ol>
+</nav>
 
 
 
       <footer slot="main-footer">
   <div class="footer">
     Found a mistake? Want to contribute?
-    <a href="https://github.com/konnorrogers/diff-view-element/tree/main/docs/src/index.md" target="_blank" rel="nofollow noopener noreferrer"> Edit this page on GitHub  <external-icon></external-icon></a>
+    <a href="https://github.com/konnorrogers/diff-view-element/tree/main/docs/src/_documentation/guides/01-getting-started.md" target="_blank" rel="nofollow noopener noreferrer"> Edit this page on GitHub  <external-icon></external-icon></a>
 
     <div style="margin: 1.5rem 0;"></div>
 
@@ -297,7 +497,7 @@
   <ul class="side-nav__menu">
       <ul class="side-nav__category-menu">
         <li class="side-nav__category-header"><a class="side-nav__category-link" href="/diff-view-element/guides">Guides</a></li>
-          <li class="side-nav__item ">
+          <li class="side-nav__item is-active">
     <a class="side-nav__link" href="/diff-view-element/guides/getting-started/">Getting Started</a>
   </li>
   <li class="side-nav__item ">
