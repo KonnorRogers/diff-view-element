@@ -152,7 +152,7 @@ dist-ssr
   }
 
   packageJSON () {
-    const version = this.isLocal ? "file:./vendor/diff-view-element" : document.querySelector("meta[version-number]")?.content
+    const version = this.isLocal ? "file:./vendor/diff-view-element" : document.querySelector("meta[name='version-number']").content
     return `{
       "name": "diff-view-element-starter",
       "private": true,
