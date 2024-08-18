@@ -1,5 +1,18 @@
 name: Deploy Site
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+
 on:
   push:
     branches:
@@ -78,7 +91,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          pnpm exec gh-pages -d ./docs/output --dotfiles -b gh-pages -- -u "github-actions-bot <support+actions@github.com>"
+          pnpm exec gh-pages --remove "*!(pull)" -d ./docs/output --dotfiles -b gh-pages -- -u "github-actions-bot <support+actions@github.com>"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -99,3 +112,4 @@ jobs:
           number: ${{ github.event.number }}
           id: deploy-preview
           message: "A preview of ${{ github.event.after }} is uploaded and can be seen here:\n\n ✨ ${{ env.BASE_URL }} ✨\n\nChanges may take a few minutes to propagate. Since this is a preview of production, content with `draft: true` will not be rendered. The source is here: https://github.com/${{ github.repository }}/tree/gh-pages/${{ env.PR_PATH }}/"
+
