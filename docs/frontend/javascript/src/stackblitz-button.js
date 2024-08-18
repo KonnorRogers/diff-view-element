@@ -115,7 +115,7 @@ export class StackblitzButton extends LitElement {
           })
         } else {
           // Use a version number for all others.
-          this.files["package.json"]
+          this.files["package.json"] = this.packageJSON()
         }
 
         this.files = {...this.files}
@@ -152,7 +152,7 @@ dist-ssr
   }
 
   packageJSON () {
-    const version = this.isLocal ? "file:./vendor/diff-view-element" : document.querySelector("meta[version-number]").content
+    const version = this.isLocal ? "file:./vendor/diff-view-element" : document.querySelector("meta[version-number]")?.content
     return `{
       "name": "diff-view-element-starter",
       "private": true,

@@ -14,6 +14,6 @@ if (!version) {
 }
 
 const data = `// This file is auto-generated. Do not manually edit this.
-export const version = "${version}"`
+export const version = "${version}";`
 
-// fs.writeFileSync(path.resolve(__dirname, "../internal/version.js"), data)
+fs.writeFileSync(path.resolve(__dirname, "../internal/version.js"), data)
