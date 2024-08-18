@@ -1,0 +1,22 @@
+---
+template_engine: erb
+---
+<% require "json" %>
+<% hash = {} %>
+<% Dir[
+  File.expand_path("../../package.json", __dir__),
+  File.expand_path("../../README.md", __dir__),
+  File.expand_path("../../LICENSE.md", __dir__),
+  File.expand_path("../../{types,exports,internal}/**/*.*", __dir__),
+].each do |file| %>
+  <% relative_file_path = Pathname.new(file).relative_path_from(File.expand_path("../../", __dir__)).to_s %>
+  <% hash[relative_file_path] = File.read(file) %>
+<% end %>
+
+
+<%# This is needed because npm does not like the "link:./" protocol from PNPM. %>
+<% package_json = JSON.parse(hash["package.json"]) %>
+<% package_json["devDependencies"].delete("diff-view-element") %>
+<% hash["package.json"] = JSON.pretty_generate(package_json) %>
+
+<%= hash.to_json.to_s.html_safe %>

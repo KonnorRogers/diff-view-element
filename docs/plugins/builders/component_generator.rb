@@ -98,7 +98,7 @@ class Builders::ComponentGenerator < SiteBuilder
     script = <<~MD
       ```html
       <!-- Auto registers as <#{tag_name}> -->
-      <script type="module" src="https://cdn.jsdelivr.net/npm/#{package_name}/#{path_without_ext}-register.js"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/#{package_name}/cdn/#{path_without_ext}-register.js"></script>
       ```
     MD
 
@@ -106,10 +106,10 @@ class Builders::ComponentGenerator < SiteBuilder
       ```html
       <script type="module">
         // Auto registers as <#{tag_name}>
-        import "https://cdn.jsdelivr.net/npm/#{package_name}/#{path_without_ext}-register.js"
+        import "https://cdn.jsdelivr.net/npm/#{package_name}/cdn/#{path_without_ext}-register.js"
 
         // Manual Register
-        import #{import_name} from "https://cdn.jsdelivr.net/npm/#{package_name}/#{path}"
+        import #{import_name} from "https://cdn.jsdelivr.net/npm/#{package_name}/cdn/#{path}"
         #{import_name}.define()
         // => Registers as <#{tag_name}>
       </script>

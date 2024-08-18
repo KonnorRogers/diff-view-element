@@ -7,6 +7,18 @@ export const baseStyles = css`
     box-sizing: border-box;
   }
 
+  :host(:dir(rtl)) *,
+  :host(:dir(rtl)) *:after,
+  :host(:dir(rtl)) *:before {
+    direction: rtl;
+  }
+
+  :host(:dir(ltr)) *,
+  :host(:dir(ltr)) *:after,
+  :host(:dir(ltr)) *:before {
+    direction: ltr;
+  }
+
   .visually-hidden:not(:focus-within) {
     position: absolute;
     overflow: hidden;
@@ -30,7 +42,7 @@ export const baseStyles = css`
  * @param {string[]} selectors
  */
 export const buttonStyles = css`
-  .light-button {
+  button {
     appearance: none;
     -webkit-appearance: none;
     border: 1px solid gray;
@@ -40,17 +52,17 @@ export const buttonStyles = css`
     border-radius: 4px;
   }
 
-  .light-button:focus-visible {
+  button:focus-visible {
     outline: 2px solid hsl(203, 77%, 43%);
   }
 
   @supports not selector(:focus-visible) {
-    .light-button:focus-within {
+    button:focus-within {
       outline: 2px solid hsl(203, 77%, 43%);
     }
   }
 
-  .light-button:is(:active, :hover, .is-active) {
+  button:is(:active, :hover, .is-active) {
     cursor: pointer;
     color: hsla(203, 77%, 43%);
     background-color: hsla(203, 77%, 93%);

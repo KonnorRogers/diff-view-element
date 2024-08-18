@@ -1,5 +1,11 @@
 name: Deploy Site
 
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 on:
   push:
     branches:
@@ -11,6 +17,23 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    permissions:
+      actions: write
+      attestations: none
+      checks: read
+      contents: write
+      deployments: write
+      id-token: write
+      issues: write
+      discussions: none
+      packages: none
+      pages: none
+      pull-requests: read
+      repository-projects: none
+      security-events: none
+      statuses: read
+
     strategy:
       matrix:
         node-version: [18]
@@ -78,7 +101,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          pnpm exec gh-pages -d ./docs/output --dotfiles -b gh-pages -- -u "github-actions-bot <support+actions@github.com>"
+          pnpm exec gh-pages --remove "*!(pull)" -d ./docs/output --dotfiles -b gh-pages -- -u "github-actions-bot <support+actions@github.com>"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

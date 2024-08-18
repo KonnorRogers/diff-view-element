@@ -1,0 +1,44 @@
+light-preview::part(source-code-toggle) {
+  border-bottom-right-radius: 0px;
+}
+light-preview::part(source-code-toggle):focus-visible,
+light-preview::part(panel-resizer):focus-visible {
+  outline: var(--sl-focus-ring);
+}
+
+light-preview::part(source-code-toggle):hover,
+light-preview::part(panel-resizer):hover {
+  cursor: pointer;
+  background-color: var(--sl-color-primary-50);
+  border-color: var(--sl-color-primary-300);
+  color: var(--sl-color-primary-700);
+}
+
+light-preview form-control {
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, auto);
+  place-content: center;
+  place-items: center;
+  gap: 4px;
+  border: 1px solid lightgray;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+}
+
+light-preview form-control input[type="checkbox"] {
+  margin: 0;
+  height: 1em;
+  width: 1em;
+  accent-color: var(--sl-color-primary-600);
+}
+
+light-preview [slot="above-expanded-code"] {
+  display: grid;
+}
+
+@media screen and (min-width: 460px) {
+  light-preview [slot="above-expanded-code"] {
+    grid-auto-flow: column;
+  }
+}

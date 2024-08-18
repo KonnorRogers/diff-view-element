@@ -1,8 +1,8 @@
 ---
-title: <diff-view-element>
+title: <basic-diff-view-element>
 ---
 
-<diff-view-element hidden></diff-view-element>
+<basic-diff-view-element hidden></basic-diff-view-element>
 
 ## Examples
 
@@ -12,8 +12,7 @@ title: <diff-view-element>
 >
 
   <script slot="code" type="text/plain">
-    <diff-view-element
-      language="javascript"
+    <basic-diff-view-element
       old-value="const x = 'Hello World'"
       new-value="
         const y = 'Hello Moto'
@@ -21,7 +20,7 @@ title: <diff-view-element>
       "
     >
 
-    </diff-view-element>
+    </basic-diff-view-element>
   </script>
 </light-preview>
 
@@ -32,13 +31,12 @@ title: <diff-view-element>
   script-scope="shadow-dom"
 >
   <script slot="code" type="text/plain">
-    <diff-view-element
-      language="javascript"
+    <basic-diff-view-element
     >
-    </diff-view-element>
+    </basic-diff-view-element>
     <script type="module">
       ;(async () => {
-        const viewer = document.querySelector("diff-view-element")
+        const viewer = document.querySelector("basic-diff-view-element")
         const newValue = await (await fetch("https://raw.githubusercontent.com/praneshr/react-diff-viewer/master/examples/src/diff/javascript/new.rjs")).text()
 
         const oldValue = await (await fetch("https://raw.githubusercontent.com/praneshr/react-diff-viewer/master/examples/src/diff/javascript/old.rjs")).text()
@@ -60,15 +58,14 @@ Line numbers can be disabled by adding the `disable-line-numbers` attribute.
   script-scope="shadow-dom"
 >
   <script slot="code" type="text/plain">
-    <diff-view-element
-      language="javascript"
+    <basic-diff-view-element
       disable-line-numbers=""
       old-value="const x = 'Hello World'"
       new-value="
         const y = 'Hello Moto'
         console.log(y)
       "
-    ></diff-view-element>
+    ></basic-diff-view-element>
   </script>
 </light-preview>
 
@@ -82,15 +79,14 @@ The starting line number can be changed by using the `line-number-start` attribu
 >
 
   <script slot="code" type="text/plain">
-    <diff-view-element
-      language="javascript"
+    <basic-diff-view-element
       line-number-start="35"
       old-value="const x = 'Hello World'"
       new-value="
         const y = 'Hello Moto'
         console.log(y)
       "
-    ></diff-view-element>
+    ></basic-diff-view-element>
   </script>
 </light-preview>
 
@@ -108,8 +104,7 @@ Slotted content will have extra leading / trailing whitespace stripped, will be 
   unescape-behavior="all"
 >
   <script slot="code" type="text/plain">
-    <diff-view-element
-      language="html"
+    <basic-diff-view-element
     >
       <script slot="old-value" type="text/plain">
         <div>Hello World</div>
@@ -117,7 +112,7 @@ Slotted content will have extra leading / trailing whitespace stripped, will be 
       <script slot="new-value" type="text/plain">
         <span>Hello World</span>
       &lt;/script>
-    </diff-view-element>
+    </basic-diff-view-element>
   </script>
 </light-preview>
 
@@ -131,8 +126,7 @@ Whitespace can be preserved by using `preserve-whitespace` which will also prese
   unescape-behavior="all"
 >
   <script slot="code" type="text/plain">
-    <diff-view-element
-      language="html"
+    <basic-diff-view-element
       preserve-whitespace
     >
       <script slot="old-value" type="text/plain">
@@ -145,7 +139,7 @@ Whitespace can be preserved by using `preserve-whitespace` which will also prese
         <span>Hello World</span>
 
       &lt;/script>
-    </diff-view-element>
+    </basic-diff-view-element>
   </script>
 </light-preview>
 
@@ -161,5 +155,4 @@ Whitespace can be preserved by using `preserve-whitespace` which will also prese
 Got an idea? I'd love to hear it!
 
 <https://github.com/KonnorRogers/diff-view-element/issues>
-
 

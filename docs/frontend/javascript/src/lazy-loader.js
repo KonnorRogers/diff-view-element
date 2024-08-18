@@ -59,6 +59,11 @@ export default function lazyLoader() {
           import("@shoelace-style/shoelace/dist/components/button/button.js");
         },
       },
+      "sl-checkbox": {
+        register() {
+          import("@shoelace-style/shoelace/dist/components/checkbox/checkbox.js");
+        },
+      },
       "sl-divider": {
         register() {
           import("@shoelace-style/shoelace/dist/components/divider/divider.js");

@@ -97,15 +97,15 @@ class Builders::Helpers < SiteBuilder
   end
 
   def version_number
-    is_ci = ENV["GITHUB_REF_NAME"] != ""
+    # is_ci = ENV["GITHUB_REF_NAME"] != ""
 
-    if is_ci && ENV["GITHUB_REF_NAME"] == "main"
-      return "main"
-    end
+    # if is_ci && ENV["GITHUB_REF_NAME"] == "main"
+    #   return "main"
+    # end
 
-    if !is_ci && `git rev-parse --abbrev-ref HEAD`.chomp == "main"
-      return "main"
-    end
+    # if !is_ci && `git rev-parse --abbrev-ref HEAD`.chomp == "main"
+    #   return "main"
+    # end
 
     package_json_file = File.join(File.expand_path("../../../", __dir__), "package.json")
 

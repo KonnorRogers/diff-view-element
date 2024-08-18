@@ -1,9 +1,12 @@
+require "json"
 class Builders::Inspectors < SiteBuilder
   def build
     inspect_html do |document|
       grab_headers(document)
       mark_external(document)
       syntax_highlight(document)
+      add_preview_buttons(document)
+      apply_base_path_to_anchors(document)
     end
   end
 
@@ -89,6 +92,35 @@ class Builders::Inspectors < SiteBuilder
       # list = document.create_element("ul", "", class: "side-nav__category-menu")
       # list << item
       # mobile_menu.before list
+    end
+  end
+
+  def add_preview_buttons(document)
+    preview = document.css("light-preview")
+
+    preview.each do |el|
+      id = "checkbox-" + SecureRandom.uuid.slice(0, 16).to_s
+      html = <<~HTML
+        <div slot="above-expanded-code">
+          <codepen-button></codepen-button>
+          <stackblitz-button></stackblitz-button>
+          <form-control>
+            <input id="#{id}" type="checkbox" data-controller="direction-switcher">
+            <label for="#{id}" aria-label="Toggle right to left">RTL</label>
+          </form-control>
+        </div>
+      HTML
+
+      el << html
+    end
+  end
+
+  def apply_base_path_to_anchors(document)
+    document.css("a[href^='/']").each do |anchor|
+      href = anchor[:href]
+      next if href.starts_with?(site.base_path)
+
+      anchor[:href] = site.base_path.gsub(/\/$/, "") + href
     end
   end
 end

@@ -2,9 +2,11 @@ import { html, fixture, assert } from "@open-wc/testing";
 import { readFile } from "@web/test-runner-commands";
 import "diff-view-element";
 
-suite("<diff-view-element>", () => {
+suite("<basic-diff-view-element>", () => {
   test("Should render a component", async () => {
-    const el = await fixture(html` <diff-view-element></diff-view-element> `);
+    const el = await fixture(html`
+      <basic-diff-view-element></basic-diff-view-element>
+    `);
 
     assert(
       el.matches(":defined"),
@@ -13,12 +15,12 @@ suite("<diff-view-element>", () => {
   });
   test("Should correctly identify diffs for a simple comparison", async () => {
     const el = await fixture(
-      html` <diff-view-element
+      html` <basic-diff-view-element
         language="javascript"
         old-value="const x = 'Hello World'"
         new-value="const y = 'Hello Moto'
 console.log(y)"
-      ></diff-view-element>`,
+      ></basic-diff-view-element>`,
     );
     const addedLines = el.shadowRoot
       .querySelector("table")
@@ -53,7 +55,9 @@ console.log(y)"
   });
 
   test("Should correctly identify diffs for an advanced comparison", async () => {
-    const el = await fixture(html` <diff-view-element></diff-view-element> `);
+    const el = await fixture(html`
+      <basic-diff-view-element></basic-diff-view-element>
+    `);
 
     const oldValue = await readFile({
       path: "fixtures/webpack-diff-old.js",
@@ -102,13 +106,13 @@ console.log(y)"
 
   test("Should correctly identify diffs with a line number offset", async () => {
     const el = await fixture(
-      html` <diff-view-element
+      html` <basic-diff-view-element
         language="javascript"
         line-number-start="35"
         old-value="const x = 'Hello World'"
         new-value="const y = 'Hello Moto'
 console.log(y)"
-      ></diff-view-element>`,
+      ></basic-diff-view-element>`,
     );
     const addedLines = el.shadowRoot
       .querySelector("table")
@@ -143,7 +147,9 @@ console.log(y)"
   });
 
   test("Should correctly identify diffs for an advanced comparison", async () => {
-    const el = await fixture(html` <diff-view-element></diff-view-element> `);
+    const el = await fixture(html`
+      <basic-diff-view-element></basic-diff-view-element>
+    `);
 
     const oldValue = await readFile({
       path: "fixtures/webpack-diff-old.js",

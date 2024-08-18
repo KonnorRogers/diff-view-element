@@ -1,17 +1,17 @@
 // @ts-check
-// import { expandTypesPlugin } from './expand-types.js'
 
 const globs = [
   "exports/**/*.{d.ts,js}",
   "internal/**/*.{d.ts,js}",
   "types/**/*.d.ts",
+  "node_modules/web-component-define/**/*.js",
 ];
 
 export default {
   /** Globs to analyze */
   globs,
   /** Globs to exclude */
-  exclude: ["node_modules", "docs"],
+  exclude: ["docs"],
   /** Directory to output CEM to */
   outdir: ".",
   /** Run in dev mode, provides extra logging */
@@ -30,19 +30,28 @@ export default {
   fast: false,
   /** Enable special handling for stencil */
   stencil: false,
+  /** Overrides default module creation: */
   // overrideModuleCreation: ({ts, globs}) => {
-  //   const program = ts.createProgram(globs, {target: ts.ScriptTarget.ESNext, module: ts.ModuleKind.ESNext, allowJs: true, checkJs: true});
-  //
-  //   // If we dont do this, everything blows up.
-  //   program.getTypeChecker()
-  //
-  //   return program.getSourceFiles().filter(sf => globs.find(glob => {
-  //     return sf.fileName.includes(glob)
-  //   }))
+  //   const program = ts.createProgram(globs, {
+  //     module: ts.ModuleKind.NodeNext,
+  //     moduleResolution: ts.ModuleResolutionKind.NodeNext,
+  //     "skipDefaultLibCheck": true,
+  //     "strict": true,
+  //     "target": ts.ScriptTarget.ESNext,
+  //     "allowSyntheticDefaultImports": true,
+  //     "useDefineForClassFields": false,
+  //     "noImplicitAny": true,
+  //     "lib": ["ESNext", "DOM", "DOM.Iterable"],
+  //     "declaration": true,
+  //     "emitDeclarationOnly": true,
+  //     "allowJs": true,
+  //     "checkJs": true,
+  //     "verbatimModuleSyntax": true,
+  //     "noImplicitOverride": true
+  //   })
+
+  //   const typeChecker = program.getTypeChecker();
+
+  //   return program.getSourceFiles().filter(sf => globs.find(glob => sf.fileName.includes(glob)));
   // },
-  // /** Provide custom plugins */
-  // plugins: [
-  //   /** You can now pass the typeChecker to your plugins */
-  //   expandTypesPlugin({ globs })
-  // ],
 };
