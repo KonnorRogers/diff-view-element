@@ -7,7 +7,7 @@ const __filename = url.fileURLToPath(new URL(import.meta.url));
 const filepath = path.relative(process.cwd(), __filename)
 
 const version = process.env.PACKAGE_VERSION
-console.log("VERSION: ", version)
+// console.log("VERSION: ", version)
 if (!version) {
   console.error(`"${filepath}" must be run via NPM's runner. Use: "npm run update-version" for this to work properly.`)
   process.exit(1)
@@ -16,4 +16,4 @@ if (!version) {
 const data = `// This file is auto-generated. Do not manually edit this.
 export const version = "${version}"`
 
-fs.writeFileSync(path.resolve(__dirname, "../internal/version.js"), data)
+// fs.writeFileSync(path.resolve(__dirname, "../internal/version.js"), data)
