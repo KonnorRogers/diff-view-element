@@ -41,7 +41,7 @@
     "watch:cem": "custom-elements-manifest analyze --watch",
     "analyze": "custom-elements-manifest analyze --litelement",
     "update-version": "PACKAGE_VERSION=$npm_package_version node scripts/update-version.js",
-    "postversion": "npm run update-version && npm run build",
+    "version": "npm run update-version && npm run build && git add internal/version.js",
     "prepublish": "npm run update-version && npm run build",
     "deploy:patch": "npm version patch && npm publish && git push --follow-tags",
     "deploy:minor": "npm version minor && npm publish && git push --follow-tags",
