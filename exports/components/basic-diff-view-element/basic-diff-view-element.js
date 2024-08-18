@@ -66,6 +66,7 @@ export default class BasicDiffViewElement extends BaseElement {
       },
       lineNumberStart: { type: Number, attribute: "line-number-start" },
       wrap: { reflect: true, attribute: "wrap" },
+      language: { reflect: true }
     })
   }
 

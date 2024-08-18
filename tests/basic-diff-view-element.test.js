@@ -22,11 +22,11 @@ console.log(y)"
     );
     const addedLines = el.shadowRoot
       .querySelector("table")
-      .querySelectorAll("[part~='line-inserted']");
+      .querySelectorAll("[part~='line--inserted']");
     assert.equal(addedLines.length, 2);
     const removedLines = el.shadowRoot
       .querySelector("table")
-      .querySelectorAll("[part~='line-deleted']");
+      .querySelectorAll("[part~='line--deleted']");
     assert.equal(removedLines.length, 1);
 
     const diffs = el.shadowRoot
@@ -69,11 +69,11 @@ console.log(y)"
 
     const addedLines = el.shadowRoot
       .querySelector("table")
-      .querySelectorAll("[part~='line-inserted']");
+      .querySelectorAll("[part~='line--inserted']");
     assert.equal(addedLines.length, 9);
     const removedLines = el.shadowRoot
       .querySelector("table")
-      .querySelectorAll("[part~='line-deleted']");
+      .querySelectorAll("[part~='line--deleted']");
     assert.equal(removedLines.length, 23);
 
     const diffs = el.shadowRoot
@@ -112,11 +112,11 @@ console.log(y)"
     );
     const addedLines = el.shadowRoot
       .querySelector("table")
-      .querySelectorAll("[part~='line-inserted']");
+      .querySelectorAll("[part~='line--inserted']");
     assert.equal(addedLines.length, 2);
     const removedLines = el.shadowRoot
       .querySelector("table")
-      .querySelectorAll("[part~='line-deleted']");
+      .querySelectorAll("[part~='line--deleted']");
     assert.equal(removedLines.length, 1);
 
     const diffs = el.shadowRoot
@@ -159,11 +159,11 @@ console.log(y)"
 
     const addedLines = el.shadowRoot
       .querySelector("table")
-      .querySelectorAll("[part~='line-inserted']");
+      .querySelectorAll("[part~='line--inserted']");
     assert.equal(addedLines.length, 9);
     const removedLines = el.shadowRoot
       .querySelector("table")
-      .querySelectorAll("[part~='line-deleted']");
+      .querySelectorAll("[part~='line--deleted']");
     assert.equal(removedLines.length, 23);
 
     const diffs = el.shadowRoot

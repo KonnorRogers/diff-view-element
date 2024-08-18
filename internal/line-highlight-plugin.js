@@ -26,7 +26,7 @@ export function LineHighlightWrapPlugin() {
       partTypes.forEach((type) => {
         if (!token.type.includes(type)) return;
 
-        token.attributes["part"] += ` ${partName}-${type}`;
+        token.attributes["part"] += ` ${partName}--${type}`;
       });
     }
   }
