@@ -1,0 +1,30 @@
+.hero {
+  margin: 0 auto;
+  padding: 16px;
+  max-width: 600px;
+}
+
+.hero--mobile {
+  display: flex;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.hero--mobile a {
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero--mobile .logo__text {
+  font-size: 2em;
+}
+
+.hero__caption {
+  font-size: 0.85em;
+  margin-top: 6px;
+  border-inline-start: 4px solid var(--divider-color);
+  padding-inline-start: 8px;
+}
