@@ -325,13 +325,14 @@ export default class BasicDiffViewElement extends BaseElement {
     }
 
     return html`
-      <td part=${`gutter-cell gutter-cell--${diffType} ${diffType}`}>
-        <span part="line-number">${lineNumber}</span>
-      </td>
+      <!-- prettier-ignore -->
+      <td part=${`gutter-cell gutter-cell--${diffType} ${diffType}`}><span part="line-number">${lineNumber}</span></td>
+      <!-- prettier-ignore -->
       <td part=${`diff-marker diff-marker--${diffType} ${diffType}`}></td>
-      <td part=${`line line--${diffType} ${diffType}`}>
-        ${this.renderValue(diffInfo)}
-      </td>
+      <!-- prettier-ignore -->
+      <td part=${`line line--${diffType} ${diffType}`}>${this.renderValue(
+        diffInfo,
+      )}</td>
     `;
   }
 
