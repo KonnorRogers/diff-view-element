@@ -348,13 +348,12 @@ ${Mn.source}+`,"g")))&&t.push(...l)}if(!o)return s(),i;if(t.length){let a=Math.m
           ${this.renderLine(r.left)} ${this.renderLine(r.right)}
         </tr>
       `)}),t}renderLine(e){let t="";e.lineNumber!=null&&(t=(e.lineNumber+this.lineNumberStart-1).toString());let r=e.type||"";return r==="added"&&(r="inserted"),r==="removed"&&(r="deleted"),Y`
-      <td part=${`gutter-cell gutter-cell--${r} ${r}`}>
-        <span part="line-number">${t}</span>
-      </td>
+      <!-- prettier-ignore -->
+      <td part=${`gutter-cell gutter-cell--${r} ${r}`}><span part="line-number">${t}</span></td>
+      <!-- prettier-ignore -->
       <td part=${`diff-marker diff-marker--${r} ${r}`}></td>
-      <td part=${`line line--${r} ${r}`}>
-        ${this.renderValue(e)}
-      </td>
+      <!-- prettier-ignore -->
+      <td part=${`line line--${r} ${r}`}>${this.renderValue(e)}</td>
     `}renderValue(e){let t=e.value;return e.data?.length&&(t=e.data.map(r=>r.type==="removed"||r.type==="added"?Y`<span
             part=${`character-diff character-diff--${Pn[r.type]}`}
             >${r.value}</span
@@ -396,4 +395,4 @@ lit-html/is-server.js:
    * SPDX-License-Identifier: BSD-3-Clause
    *)
 */
-//# sourceMappingURL=/diff-view-element/bridgetown/static/chunks/chunk-PY5USBIA.js.map
+//# sourceMappingURL=/diff-view-element/bridgetown/static/chunks/chunk-47WTAMED.js.map

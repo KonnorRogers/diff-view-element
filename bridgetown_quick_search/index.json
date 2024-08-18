@@ -117,7 +117,7 @@
           "categories": "references",
           "tags": "",
           "url": "/diff-view-element/references/changelog/",
-          "content": ""
+          "content": "1.0.1 08/18/2024\n\nBug Fix(&lt;basic-diff-view-element&gt;): Fix a whitespace issue caused by Prettier auto formatting. #2"
         },
         {
           "id": "diff-view-element",
