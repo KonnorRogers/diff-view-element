@@ -1,6 +1,6 @@
 {
   "name": "diff-view-element",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A web component for displaying diffs in the browser",
   "main": "./exports/index.js",
   "module": "./exports/index.js",
