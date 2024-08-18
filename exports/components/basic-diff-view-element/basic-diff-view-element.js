@@ -330,7 +330,9 @@ export default class BasicDiffViewElement extends BaseElement {
       <!-- prettier-ignore -->
       <td part=${`diff-marker diff-marker--${diffType} ${diffType}`}></td>
       <!-- prettier-ignore -->
-      <td part=${`line line--${diffType} ${diffType}`}>${this.renderValue(diffInfo)}</td>
+      <td part=${`line line--${diffType} ${diffType}`}>${this.renderValue(
+        diffInfo,
+      )}</td>
     `;
   }
 
