@@ -395,4 +395,4 @@ lit-html/is-server.js:
    * SPDX-License-Identifier: BSD-3-Clause
    *)
 */
-//# sourceMappingURL=/diff-view-element/pull/3/bridgetown/static/chunks/chunk-W6RIUUP6.js.map
+//# sourceMappingURL=/diff-view-element/pull/3/bridgetown/static/chunks/chunk-5PLYYF24.js.map
