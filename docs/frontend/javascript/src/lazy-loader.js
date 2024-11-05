@@ -131,6 +131,11 @@ export default function lazyLoader() {
           );
         },
       },
+      "sl-tooltip": {
+        register() {
+          import("@shoelace-style/shoelace/dist/components/tooltip/tooltip.js");
+        },
+      },
       "sl-visually-hidden": {
         register() {
           import(
